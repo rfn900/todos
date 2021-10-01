@@ -34,3 +34,5 @@
 
 # vercel
 /client/.vercel
+
+.DS_Store
