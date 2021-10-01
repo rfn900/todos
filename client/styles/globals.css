@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+}
+
+@layer components {
+  .btn-primary {
+    @apply px-4 py-2 font-bold text-gray-700 bg-yellow-200 rounded-full shadow-md transition hover:bg-yellow-500;
+  }
+  .btn-secondary {
+    @apply px-4 py-2 font-bold text-yellow-500 bg-transparent border-2 border-yellow-500 rounded-full transition shadow-md hover:bg-yellow-400 hover:text-white;
+  }
+  .section-full {
+    @apply relative flex max-h-full py-24 overflow-hidden lg:h-screen;
+  }
+}
