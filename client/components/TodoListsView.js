@@ -16,7 +16,12 @@ export const TodoListsView = () => {
     e.preventDefault();
 
     //TODO: Save TodoList to Database
-    setTodos([""]);
+    setTodos([
+      {
+        content: "",
+        completed: false,
+      },
+    ]);
     setEditMode(true);
     console.log(e);
   };
@@ -36,7 +41,7 @@ export const TodoListsView = () => {
             <input
               ref={listInputRef}
               required
-              className="w-full text-gray-600 placeholder-gray-600 outline-none"
+              className="w-full text-gray-600 placeholder-gray-600 outline-none font-bold"
               type="text"
               name="todo_add"
               placeholder="Todo List Title..."
@@ -64,7 +69,7 @@ export const TodoListsView = () => {
         {editMode && (
           <>
             <form className="w-full ">
-              {todos.map((_, index) => {
+              {todos.map((todo, index) => {
                 return (
                   <div
                     key={index}
@@ -72,25 +77,40 @@ export const TodoListsView = () => {
                       !index ? "border-t-px" : ""
                     } border-gray-300`}
                   >
-                    <label className=" flex px-6 py-1 items-center w-full gap-2">
-                      {todos[index] === "" ? (
+                    <label className="flex items-center w-full px-6 py-1  gap-2">
+                      {todo.content === "" ? (
                         <PlusIcon className="h-4 text-gray-400" />
                       ) : (
                         <input
+                          onChange={(e) =>
+                            setTodos([
+                              ...todos.slice(0, index),
+                              {
+                                ...todos[index],
+                                completed: !todo.completed,
+                              },
+                              ...todos.slice(index + 1),
+                            ])
+                          }
                           type="checkbox"
                           name="complete"
-                          className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                          className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
                         />
                       )}
                       <input
                         type="text"
                         name="todo_item"
                         placeholder="List Item"
-                        className="w-5/6 outline-none pl-2"
+                        className={`w-5/6 outline-none pl-2 ${
+                          todo.completed ? "line-through text-gray-400" : ""
+                        }`}
                         onChange={(e) =>
                           setTodos([
                             ...todos.slice(0, index),
-                            e.target.value,
+                            {
+                              ...todos[index],
+                              content: e.target.value,
+                            },
                             ...todos.slice(index + 1),
                           ])
                         }
@@ -103,7 +123,15 @@ export const TodoListsView = () => {
             </form>
             <div className="flex py-4 px-4 items-center justify-between w-full">
               <button
-                onClick={() => setTodos([...todos, ""])}
+                onClick={() =>
+                  setTodos([
+                    ...todos,
+                    {
+                      content: "",
+                      completed: false,
+                    },
+                  ])
+                }
                 className="text-gray-500 flex w-auto hover:bg-gray-50 rounded-full px-4"
               >
                 Add New Item
