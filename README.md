@@ -17,7 +17,7 @@ my design.
 - The application needs to show an overview of all lists as well as the details
   of single lists
 - The code should be in a public repo on Github
-- No pointless comments and no `console.log`, should be left in the final
+- No pointless comments and no `console.log` should be left in the final
   version of the code.
 
 ## Requirements for _VG_
