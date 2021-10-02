@@ -9,8 +9,6 @@ import ReactTooltip from "react-tooltip";
 
 export const TodoListsView = () => {
   const [isMounted, setIsMounted] = useState(false);
-  const [editMode, setEditMode] = useState(false);
-  const [todos, setTodos] = useState([]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,7 +20,6 @@ export const TodoListsView = () => {
         completed: false,
       },
     ]);
-    setEditMode(true);
     console.log(e);
   };
 
@@ -30,8 +27,6 @@ export const TodoListsView = () => {
   useEffect(() => {
     setIsMounted(true);
     console.log(todos);
-    if (!editMode) listInputRef.current.value = "";
-  }, [todos, editMode]);
 
   return (
     <div className="flex items-center justify-center w-full mt-12">
@@ -48,25 +43,20 @@ export const TodoListsView = () => {
             />
             {isMounted && <ReactTooltip />}
             <button
-              disabled={editMode}
+              disabled={todos ? true : false}
               data-tip="Add New List"
               data-type="dark"
               data-place="bottom"
               data-effect="solid"
               type="submit"
               className={`flex items-center justify-center p-4 rounded-full transition ${
-                editMode ? "cursor-default" : "hover:bg-gray-50"
               }`}
             >
               <DocumentAddIcon
-                className={`h-6 w-6 text-gray-500 ${
-                  editMode ? "opacity-50" : ""
-                }`}
               />
             </button>
           </div>
         </form>
-        {editMode && (
           <>
             <form className="w-full ">
               {todos.map((todo, index) => {
@@ -138,7 +128,6 @@ export const TodoListsView = () => {
               </button>
               <button
                 onClick={() => {
-                  setEditMode(false);
                   setTodos([]);
                   console.log(todos);
                 }}
