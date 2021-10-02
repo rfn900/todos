@@ -1,6 +1,7 @@
 import Head from "next/head";
 import { Nav } from "../components/Nav";
 import { TodoListsView } from "../components/TodoListsView";
+
 export default function Home() {
   return (
     <div className="flex flex-col max-w-8xl mx-auto min-h-screen py-2">

@@ -6,11 +6,20 @@ import {
   ViewGridAddIcon,
 } from "@heroicons/react/outline";
 import ReactTooltip from "react-tooltip";
-
+import axios from "axios";
+import { TodoListCard } from "./TodoListCard";
 export const TodoListsView = () => {
   const [isMounted, setIsMounted] = useState(false);
   const [todos, setTodos] = useState(null);
+  const [savedTodoLists, setSavedTodoLists] = useState(null);
 
+  const fetchTodos = (item = "") => {
+    return axios
+      .get(`${process.env.BACKEND_URL}/${item}`)
+      .then((res) => res.data)
+      .then((data) => Promise.resolve(data));
+  };
+  console.log(savedTodoLists);
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -21,18 +30,17 @@ export const TodoListsView = () => {
         completed: false,
       },
     ]);
-    console.log(e);
   };
 
   const listInputRef = useRef();
   useEffect(() => {
+    fetchTodos().then(setSavedTodoLists);
     setIsMounted(true);
-    console.log(todos);
     if (!todos) listInputRef.current.value = "";
   }, [todos]);
 
   return (
-    <div className="flex items-center justify-center w-full mt-12">
+    <div className="flex items-center flex-col justify-center w-full mt-12">
       <div className="w-1/2 border-2 border-gray-300 shadow-md rounded-xl">
         <form onSubmit={handleSubmit} className="">
           <div className="flex justify-between w-full px-4">
@@ -158,6 +166,12 @@ export const TodoListsView = () => {
             </div>
           </>
         )}
+      </div>
+      <div className="flex gap-8 mt-12">
+        {savedTodoLists &&
+          savedTodoLists.map((list) => {
+            return <TodoListCard key={list._id} todoList={list} />;
+          })}
       </div>
     </div>
   );
