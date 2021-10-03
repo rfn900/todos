@@ -9,7 +9,7 @@ const TodoListsSchema = new mongoose.Schema({
     type: [Object],
     required: true,
   },
-  dateLastChanged: {
+  dateLastEdited: {
     type: Date,
   },
 });

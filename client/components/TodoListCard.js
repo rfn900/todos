@@ -25,37 +25,35 @@ export const TodoListCard = ({ todoList }) => {
       <div className="w-full p-4">
         {todosToUpdate.map((todo, index) => {
           return (
-            <>
-              <div
-                key={index}
-                className="cursor-default flex flex-col space-y-4 py-2"
-              >
-                <div className="flex items-start gap-4">
-                  <input
-                    type="checkbox"
-                    checked={todo.completed}
-                    className="w-4 h-4 cursor-pointer text-yellow-400 mt-1 border-gray-300 rounded focus:ring-gray-500"
-                    onChange={(e) =>
-                      setTodosToUpdate([
-                        ...todosToUpdate.slice(0, index),
-                        {
-                          ...todosToUpdate[index],
-                          completed: !todo.completed,
-                        },
-                        ...todosToUpdate.slice(index + 1),
-                      ])
-                    }
-                  />
-                  <span
-                    className={`w-5/6 ${
-                      todo.completed ? "line-through text-gray-400" : ""
-                    } `}
-                  >
-                    {todo.content}
-                  </span>
-                </div>
+            <div
+              key={index}
+              className="cursor-default flex flex-col space-y-4 py-2"
+            >
+              <div className="flex items-start gap-4">
+                <input
+                  type="checkbox"
+                  checked={todo.completed}
+                  className="w-4 h-4 cursor-pointer text-yellow-400 mt-1 border-gray-300 rounded focus:ring-gray-500"
+                  onChange={(e) =>
+                    setTodosToUpdate([
+                      ...todosToUpdate.slice(0, index),
+                      {
+                        ...todosToUpdate[index],
+                        completed: !todo.completed,
+                      },
+                      ...todosToUpdate.slice(index + 1),
+                    ])
+                  }
+                />
+                <span
+                  className={`w-5/6 ${
+                    todo.completed ? "line-through text-gray-400" : ""
+                  } `}
+                >
+                  {todo.content}
+                </span>
               </div>
-            </>
+            </div>
           );
         })}
       </div>

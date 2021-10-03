@@ -15,17 +15,32 @@ router.get("/:id", async function (req, res, next) {
 });
 
 router.post("/", async function (req, res, next) {
-  const { todos, title } = req.body;
+  const { todos, title, dateLastEdited } = req.body;
 
   const payload = {
     title,
     todos,
+    dateLastEdited,
   };
   let todoList = new TodoLists(payload);
 
   try {
     console.log(todoList);
     await todoList.save();
+    res.status(200);
+    res.json({
+      _id: todoList._id,
+    });
+  } catch (e) {
+    res.statusCode = 500;
+    res.statusMessage = "Something went wrong";
+  }
+});
+
+router.put("/:id", async function (req, res, next) {
+  const { id } = req.params;
+  try {
+    const todoList = await TodoLists.findOneAndUpdate({ _id: id }, req.body);
     res.status(200);
     res.json({
       _id: todoList._id,

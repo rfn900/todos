@@ -11,14 +11,6 @@ import { TodoListCard } from "./TodoListCard";
 export const TodoListsView = () => {
   const [todos, setTodos] = useState(null);
   const [savedTodoLists, setSavedTodoLists] = useState(null);
-
-  const fetchTodos = (item = "") => {
-    return axios
-      .get(`${process.env.BACKEND_URL}/${item}`)
-      .then((res) => res.data)
-      .then((data) => Promise.resolve(data));
-  };
-  console.log(savedTodoLists);
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -50,7 +42,7 @@ export const TodoListsView = () => {
               name="todo_add"
               placeholder="Todo List Title..."
             />
-            {todos && <ReactTooltip />}
+            {savedTodoLists && <ReactTooltip />}
             <button
               disabled={todos ? true : false}
               data-tip="Add New List"
@@ -165,12 +157,8 @@ export const TodoListsView = () => {
           </>
         )}
       </div>
-      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 mt-24">
-        {savedTodoLists &&
-          savedTodoLists.map((list) => {
             return <TodoListCard key={list._id} todoList={list} />;
           })}
-      </div>
     </div>
   );
 };
