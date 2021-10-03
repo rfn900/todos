@@ -9,7 +9,6 @@ import ReactTooltip from "react-tooltip";
 import axios from "axios";
 import { TodoListCard } from "./TodoListCard";
 export const TodoListsView = () => {
-  const [isMounted, setIsMounted] = useState(false);
   const [todos, setTodos] = useState(null);
   const [savedTodoLists, setSavedTodoLists] = useState(null);
 
@@ -35,24 +34,23 @@ export const TodoListsView = () => {
   const listInputRef = useRef();
   useEffect(() => {
     fetchTodos().then(setSavedTodoLists);
-    setIsMounted(true);
     if (!todos) listInputRef.current.value = "";
   }, [todos]);
 
   return (
-    <div className="flex items-center flex-col justify-center w-full mt-12">
+    <div className="flex flex-col items-center justify-center w-full mt-12">
       <div className="w-1/2 border-2 border-gray-300 shadow-md rounded-xl">
         <form onSubmit={handleSubmit} className="">
           <div className="flex justify-between w-full px-4">
             <input
               ref={listInputRef}
               required
-              className="w-full text-gray-600 placeholder-gray-600 outline-none font-bold"
+              className="w-full font-bold text-gray-600 placeholder-gray-600 border-transparent focus:ring-transparent focus:border-transparent"
               type="text"
               name="todo_add"
               placeholder="Todo List Title..."
             />
-            {isMounted && <ReactTooltip />}
+            {todos && <ReactTooltip />}
             <button
               disabled={todos ? true : false}
               data-tip="Add New List"
@@ -80,7 +78,7 @@ export const TodoListsView = () => {
                     !index ? "border-t-px" : ""
                   } border-gray-300`}
                 >
-                  <div className="flex items-center w-full px-6 py-1  gap-2">
+                  <div className="flex items-center w-full px-6 py-1 gap-2">
                     {todo.content === "" ? (
                       <PlusIcon className="h-4 text-gray-400" />
                     ) : (
@@ -106,7 +104,7 @@ export const TodoListsView = () => {
                       name="todo_item"
                       placeholder="List Item"
                       value={todo.content || ""}
-                      className={`w-5/6 outline-none pl-2 ${
+                      className={`w-5/6 outline-none focus:ring-transparent focus:border-transparent border-transparent pl-2 ${
                         todo.completed ? "line-through text-gray-400" : ""
                       }`}
                       onChange={(e) =>
@@ -128,12 +126,12 @@ export const TodoListsView = () => {
                         ...todos.slice(index + 1),
                       ])
                     }
-                    className="text-gray-400 cursor-pointer h-4 ml-auto mr-8 hidden group-hover:block"
+                    className="hidden h-4 ml-auto mr-8 text-gray-400 cursor-pointer group-hover:block"
                   />
                 </div>
               );
             })}
-            <div className="flex py-4 px-4 items-center justify-between w-full">
+            <div className="flex items-center justify-between w-full px-4 py-4">
               <button
                 onClick={() =>
                   setTodos([
@@ -144,7 +142,7 @@ export const TodoListsView = () => {
                     },
                   ])
                 }
-                className="text-gray-500 flex w-auto hover:bg-gray-50 rounded-full px-4"
+                className="flex w-auto px-4 text-gray-500 rounded-full hover:bg-gray-50"
               >
                 Add New Item
               </button>
@@ -161,13 +159,13 @@ export const TodoListsView = () => {
                   console.log(todos);
                 }}
               >
-                <ViewGridAddIcon className="h-6 w-6 text-gray-400" />
+                <ViewGridAddIcon className="w-6 h-6 text-gray-400" />
               </button>
             </div>
           </>
         )}
       </div>
-      <div className="flex gap-8 mt-12">
+      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 mt-24">
         {savedTodoLists &&
           savedTodoLists.map((list) => {
             return <TodoListCard key={list._id} todoList={list} />;
