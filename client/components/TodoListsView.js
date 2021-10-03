@@ -6,21 +6,31 @@ import {
   ViewGridAddIcon,
 } from "@heroicons/react/outline";
 import ReactTooltip from "react-tooltip";
-import axios from "axios";
 import { TodoListCard } from "./TodoListCard";
+import { Loading } from "./Loading";
+import { fetchTodos, postTodoList, updateTodoList } from "../utils/apiCalls";
 export const TodoListsView = () => {
   const [todos, setTodos] = useState(null);
   const [savedTodoLists, setSavedTodoLists] = useState(null);
+  const [activeList, setActiveList] = useState(null);
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    //TODO: Save TodoList to Database
-    setTodos([
+    const newTodoListContent = [
       {
         content: "",
         completed: false,
       },
-    ]);
+    ];
+    setTodos(newTodoListContent);
+    const payload = {
+      title: listInputRef.current.value,
+      todos: newTodoListContent,
+      dateLastEdited: new Date(),
+    };
+
+    const { _id } = await postTodoList(payload);
+    setActiveList(_id);
+    console.log(_id);
   };
 
   const listInputRef = useRef();
