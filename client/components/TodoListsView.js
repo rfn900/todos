@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import {
   DocumentAddIcon,
   PlusIcon,
@@ -6,13 +6,17 @@ import {
   ViewGridAddIcon,
 } from "@heroicons/react/outline";
 import ReactTooltip from "react-tooltip";
+import { debounce } from "lodash";
+
 import { TodoListCard } from "./TodoListCard";
 import { Loading } from "./Loading";
 import { fetchTodos, postTodoList, updateTodoList } from "../utils/apiCalls";
+
 export const TodoListsView = () => {
   const [todos, setTodos] = useState(null);
   const [savedTodoLists, setSavedTodoLists] = useState(null);
   const [activeList, setActiveList] = useState(null);
+  const [refreshView, setRefreshView] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newTodoListContent = [
@@ -33,11 +37,27 @@ export const TodoListsView = () => {
     console.log(_id);
   };
 
+  const handleChange = async (newTodos) => {
+    const payload = {
+      title: listInputRef.current.value,
+      todos: newTodos,
+      dateLastEdited: new Date(),
+    };
+    console.log(activeList, payload);
+    await updateTodoList(activeList, payload);
+  };
+
+  const debouncedHandleChange = useMemo(
+    (newTodos) => debounce(handleChange, 300),
+    [activeList]
+  );
+
   const listInputRef = useRef();
+
   useEffect(() => {
     fetchTodos().then(setSavedTodoLists);
     if (!todos) listInputRef.current.value = "";
-  }, [todos]);
+  }, [refreshView]);
 
   return (
     <div className="flex flex-col items-center justify-center w-full mt-12">
@@ -85,16 +105,21 @@ export const TodoListsView = () => {
                       <PlusIcon className="h-4 text-gray-400" />
                     ) : (
                       <input
-                        onChange={() =>
-                          setTodos([
-                            ...todos.slice(0, index),
-                            {
-                              ...todos[index],
-                              completed: !todo.completed,
-                            },
-                            ...todos.slice(index + 1),
-                          ])
-                        }
+                        onChange={() => {
+                          {
+                            const newTodos = [
+                              //immutable update
+                              ...todos.slice(0, index),
+                              {
+                                ...todos[index],
+                                completed: !todo.completed,
+                              },
+                              ...todos.slice(index + 1),
+                            ];
+                            setTodos(newTodos);
+                            debouncedHandleChange(newTodos);
+                          }
+                        }}
                         type="checkbox"
                         checked={todo.completed}
                         name="complete"
@@ -109,25 +134,31 @@ export const TodoListsView = () => {
                       className={`w-5/6 outline-none focus:ring-transparent focus:border-transparent border-transparent pl-2 ${
                         todo.completed ? "line-through text-gray-400" : ""
                       }`}
-                      onChange={(e) =>
-                        setTodos([
+                      onChange={(e) => {
+                        const newTodos = [
+                          //immutable update
                           ...todos.slice(0, index),
                           {
                             ...todos[index],
                             content: e.target.value,
                           },
                           ...todos.slice(index + 1),
-                        ])
-                      }
+                        ];
+                        setTodos(newTodos);
+                        debouncedHandleChange(newTodos);
+                      }}
                     />
                   </div>
                   <XIcon
-                    onClick={(e) =>
-                      setTodos([
+                    onClick={(e) => {
+                      const newTodos = [
+                        //immutable delete
                         ...todos.slice(0, index),
                         ...todos.slice(index + 1),
-                      ])
-                    }
+                      ];
+                      setTodos(newTodos);
+                      debouncedHandleChange(newTodos);
+                    }}
                     className="hidden h-4 ml-auto mr-8 text-gray-400 cursor-pointer group-hover:block"
                   />
                 </div>
@@ -157,6 +188,7 @@ export const TodoListsView = () => {
                 type="submit"
                 className={`flex items-center p-2 mr-2 justify-center rounded-full transition hover:bg-gray-50`}
                 onClick={() => {
+                  setRefreshView(true);
                   setTodos(null);
                   console.log(todos);
                 }}
@@ -167,8 +199,15 @@ export const TodoListsView = () => {
           </>
         )}
       </div>
+      {savedTodoLists ? (
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 mt-24">
+          {savedTodoLists.map((list) => {
             return <TodoListCard key={list._id} todoList={list} />;
           })}
+        </div>
+      ) : (
+        <Loading />
+      )}
     </div>
   );
 };
