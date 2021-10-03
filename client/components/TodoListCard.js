@@ -26,12 +26,15 @@ export const TodoListCard = ({ todoList }) => {
         {todosToUpdate.map((todo, index) => {
           return (
             <>
-              <label key={index} className="flex flex-col space-y-4 py-2">
+              <div
+                key={index}
+                className="cursor-default flex flex-col space-y-4 py-2"
+              >
                 <div className="flex items-start gap-4">
                   <input
                     type="checkbox"
                     checked={todo.completed}
-                    className="w-4 h-4 text-yellow-400 mt-1 border-gray-300 rounded focus:ring-gray-500"
+                    className="w-4 h-4 cursor-pointer text-yellow-400 mt-1 border-gray-300 rounded focus:ring-gray-500"
                     onChange={(e) =>
                       setTodosToUpdate([
                         ...todosToUpdate.slice(0, index),
@@ -51,7 +54,7 @@ export const TodoListCard = ({ todoList }) => {
                     {todo.content}
                   </span>
                 </div>
-              </label>
+              </div>
             </>
           );
         })}
