@@ -60,8 +60,8 @@ export const TodoListsView = () => {
   }, [refreshView]);
 
   return (
-    <div className="flex flex-col items-center justify-center w-full mt-12">
-      <div className="w-1/2 border-2 border-gray-300 shadow-md rounded-xl">
+    <div className="flex flex-col pb-8 items-center justify-center w-full px-8 mt-12 sm:px-0">
+      <div className="w-full border-2 border-gray-300 shadow-md sm:w-1/2 rounded-xl">
         <form onSubmit={handleSubmit} className="">
           <div className="flex justify-between w-full px-4">
             <input
@@ -200,7 +200,7 @@ export const TodoListsView = () => {
         )}
       </div>
       {savedTodoLists ? (
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 mt-24">
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 mt-12 sm:mt-24">
           {savedTodoLists.map((list) => {
             return <TodoListCard key={list._id} todoList={list} />;
           })}
