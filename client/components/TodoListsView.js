@@ -54,7 +54,6 @@ export const TodoListsView = () => {
   const listInputRef = useRef();
 
   useEffect(() => {
-    if (!todos) listInputRef.current.value = "";
     fetchTodos().then(setSavedTodoLists);
   }, []);
 
@@ -165,15 +164,15 @@ export const TodoListsView = () => {
             })}
             <div className="flex items-center justify-between w-full px-4 py-4">
               <button
-                onClick={() =>
+                onClick={() => {
                   setTodos([
                     ...todos,
                     {
                       content: "",
                       completed: false,
                     },
-                  ])
-                }
+                  ]);
+                }}
                 className="flex w-auto px-4 text-gray-500 rounded-full hover:bg-gray-50"
               >
                 Add New Item
@@ -190,6 +189,7 @@ export const TodoListsView = () => {
                   fetchTodos().then(setSavedTodoLists);
                   setTodos(null);
                   console.log(todos);
+                  listInputRef.current.value = "";
                 }}
               >
                 <ViewGridAddIcon className="w-6 h-6 text-gray-400" />
