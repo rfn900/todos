@@ -1,13 +1,11 @@
-import {
-  DocumentRemoveIcon,
-  SaveIcon,
-  TrashIcon,
-} from "@heroicons/react/outline";
+import { SaveIcon, TrashIcon } from "@heroicons/react/outline";
 import { CheckCircleIcon } from "@heroicons/react/solid";
 import { useEffect, useState } from "react";
 import ReactTooltip from "react-tooltip";
 
-export const TodoListCard = ({ todoList }) => {
+import { deleteTodoList, fetchTodos } from "../utils/apiCalls";
+
+export const TodoListCard = ({ todoList, setSavedTodoLists }) => {
   const [todosToUpdate, setTodosToUpdate] = useState([...todoList.todos]);
 
   const hasListChanged = (loadedTodo, stateTodo) => {
@@ -18,22 +16,24 @@ export const TodoListCard = ({ todoList }) => {
 
     return false;
   };
+
   useEffect(() => {});
+
   return (
     <div className="relative group bg-gray-50 rounded-xl w-[300px] px-4 pt-6 pb-4 shadow-md transition duration-300 hover:shadow-xl flex flex-col">
-      <h2 className="text-lg px-3 font-semibold">{todoList.title}</h2>
+      <h2 className="px-3 text-lg font-semibold">{todoList.title}</h2>
       <div className="w-full p-4">
         {todosToUpdate.map((todo, index) => {
           return (
             <div
               key={index}
-              className="cursor-default flex flex-col space-y-4 py-2"
+              className="flex flex-col py-2 cursor-default space-y-4"
             >
               <div className="flex items-start gap-4">
                 <input
                   type="checkbox"
                   checked={todo.completed}
-                  className="w-4 h-4 cursor-pointer text-yellow-400 mt-1 border-gray-300 rounded focus:ring-gray-500"
+                  className="w-4 h-4 mt-1 text-yellow-400 border-gray-300 rounded cursor-pointer focus:ring-gray-500"
                   onChange={(e) =>
                     setTodosToUpdate([
                       ...todosToUpdate.slice(0, index),
@@ -57,8 +57,8 @@ export const TodoListCard = ({ todoList }) => {
           );
         })}
       </div>
-      <div className=" h-10 px-2 mt-auto w-full bg-gray-50">
-        <div className="w-full h-full transition duration-300 opacity-0 group-hover:opacity-100 flex items-start justify-between">
+      <div className="w-full h-10 px-2 mt-auto  bg-gray-50">
+        <div className="flex items-start justify-between w-full h-full opacity-0 transition duration-300 group-hover:opacity-100">
           <ReactTooltip />
           <button
             data-tip="Save Changes"
@@ -66,7 +66,7 @@ export const TodoListCard = ({ todoList }) => {
             data-place="bottom"
             data-effect="solid"
             disabled={!hasListChanged(todoList.todos, todosToUpdate)}
-            className="flex items-center justify-center rounded-full  hover:shadow hover:bg-gray-100 disabled:shadow-none disabled:cursor-default disabled:bg-transparent disabled:opacity-40 h-12 w-12"
+            className="flex items-center justify-center w-12 h-12 rounded-full hover:shadow hover:bg-gray-100 disabled:shadow-none disabled:cursor-default disabled:bg-transparent disabled:opacity-40"
           >
             <SaveIcon className="h-6 text-gray-500" />
           </button>
@@ -76,7 +76,11 @@ export const TodoListCard = ({ todoList }) => {
             data-type="dark"
             data-place="bottom"
             data-effect="solid"
-            className="flex items-center justify-center rounded-full  hover:shadow hover:bg-gray-100 h-12 w-12"
+            onClick={async () => {
+              await deleteTodoList(todoList._id);
+              fetchTodos().then(setSavedTodoLists);
+            }}
+            className="flex items-center justify-center w-12 h-12 rounded-full hover:shadow hover:bg-gray-100"
           >
             <TrashIcon className="h-5 text-gray-500" />
           </button>

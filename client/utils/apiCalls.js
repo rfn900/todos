@@ -27,3 +27,12 @@ export const updateTodoList = async (listId, payload) => {
     /* handle error */
   }
 };
+
+export const deleteTodoList = async (listId) => {
+  try {
+    const res = await axios.delete(`${process.env.BACKEND_URL}/${listId}`);
+    return res.data;
+  } catch (e) {
+    /* handle error */
+  }
+};

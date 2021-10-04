@@ -7,16 +7,15 @@ import {
 } from "@heroicons/react/outline";
 import ReactTooltip from "react-tooltip";
 import { debounce } from "lodash";
-
 import { TodoListCard } from "./TodoListCard";
 import { Loading } from "./Loading";
 import { fetchTodos, postTodoList, updateTodoList } from "../utils/apiCalls";
+import { SavedTodoLists } from "./SavedTodoLists";
 
 export const TodoListsView = () => {
   const [todos, setTodos] = useState(null);
   const [savedTodoLists, setSavedTodoLists] = useState(null);
   const [activeList, setActiveList] = useState(null);
-  const [refreshView, setRefreshView] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newTodoListContent = [
@@ -55,9 +54,9 @@ export const TodoListsView = () => {
   const listInputRef = useRef();
 
   useEffect(() => {
-    fetchTodos().then(setSavedTodoLists);
     if (!todos) listInputRef.current.value = "";
-  }, [refreshView]);
+    fetchTodos().then(setSavedTodoLists);
+  }, []);
 
   return (
     <div className="flex flex-col pb-8 items-center justify-center w-full px-8 mt-12 sm:px-0">
@@ -72,7 +71,7 @@ export const TodoListsView = () => {
               name="todo_add"
               placeholder="Todo List Title..."
             />
-            {savedTodoLists && <ReactTooltip />}
+            {todos && <ReactTooltip />}
             <button
               disabled={todos ? true : false}
               data-tip="Add New List"
@@ -188,7 +187,7 @@ export const TodoListsView = () => {
                 type="submit"
                 className={`flex items-center p-2 mr-2 justify-center rounded-full transition hover:bg-gray-50`}
                 onClick={() => {
-                  setRefreshView(true);
+                  fetchTodos().then(setSavedTodoLists);
                   setTodos(null);
                   console.log(todos);
                 }}
@@ -199,15 +198,10 @@ export const TodoListsView = () => {
           </>
         )}
       </div>
-      {savedTodoLists ? (
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 mt-12 sm:mt-24">
-          {savedTodoLists.map((list) => {
-            return <TodoListCard key={list._id} todoList={list} />;
-          })}
-        </div>
-      ) : (
-        <Loading />
-      )}
+      <SavedTodoLists
+        savedTodoLists={savedTodoLists}
+        setSavedTodoLists={setSavedTodoLists}
+      />
     </div>
   );
 };
