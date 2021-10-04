@@ -51,4 +51,17 @@ router.put("/:id", async function (req, res, next) {
   }
 });
 
+router.delete("/:id", async function (req, res, next) {
+  const { id } = req.params;
+  try {
+    const todoList = await TodoLists.findOneAndDelete({ _id: id });
+    res.status(200);
+    res.json({
+      _id: id,
+    });
+  } catch (e) {
+    res.statusCode = 500;
+    res.statusMessage = "Something went wrong";
+  }
+});
 module.exports = router;
