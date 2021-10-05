@@ -99,7 +99,10 @@ export const TodoListCard = ({ todoList, setSavedTodoLists }) => {
         </div>
       </div>
       <EditBox
-        todoList={todoList}
+        todosToUpdate={todosToUpdate}
+        setTodosToUpdate={setTodosToUpdate}
+        listId={todoList._id}
+        listTitle={todoList.title}
         editMode={editMode}
         setEditMode={setEditMode}
       />
