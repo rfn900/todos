@@ -1,5 +1,6 @@
 import { useRef, useMemo, useState } from "react";
 import { debounce } from "lodash";
+import { PlusIcon } from "@heroicons/react/outline";
 import { updateTodoList } from "../utils/apiCalls";
 export const EditBox = ({
   todosToUpdate,
@@ -36,7 +37,7 @@ export const EditBox = ({
         editMode ? "" : "hidden"
       }`}
     >
-      <div className="absolute rounded-xl shadow-xl w-[600px] h-[400px] top-1/2 transition left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-yellow-100">
+      <div className="absolute rounded-xl shadow-xl w-[600px] h-auto top-1/2 transition left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-yellow-100">
         <div className="p-8 flex flex-col space-y-8">
           <div className="flex items-center justify-between w-full">
             <h2 className="text-xl font-semibold">{listTitle}</h2>
@@ -87,7 +88,6 @@ export const EditBox = ({
                         },
                         ...todosToUpdate.slice(index + 1),
                       ];
-                      console.log(newTodos);
                       setTodosToUpdate(newTodos);
                       debouncedHandleChange(newTodos);
                     }}
@@ -95,6 +95,20 @@ export const EditBox = ({
                 </div>
               );
             })}
+          </div>
+          <div className="w-full">
+            <PlusIcon
+              onClick={(e) =>
+                setTodosToUpdate([
+                  ...todosToUpdate,
+                  {
+                    content: "",
+                    completed: false,
+                  },
+                ])
+              }
+              className="h-8 hover:bg-yellow-400 hover:bg-opacity-50 cursor-pointer transition rounded-full p-1 text-gray-500"
+            />
           </div>
         </div>
       </div>
