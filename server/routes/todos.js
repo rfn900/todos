@@ -42,9 +42,7 @@ router.put("/:id", async function (req, res, next) {
   try {
     const todoList = await TodoLists.findOneAndUpdate({ _id: id }, req.body);
     res.status(200);
-    res.json({
-      _id: todoList._id,
-    });
+    res.json(todoList);
   } catch (e) {
     res.statusCode = 500;
     res.statusMessage = "Something went wrong";
