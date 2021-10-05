@@ -3,10 +3,13 @@ import { CheckCircleIcon } from "@heroicons/react/solid";
 import { useEffect, useState } from "react";
 import ReactTooltip from "react-tooltip";
 
-import { deleteTodoList, fetchTodos } from "../utils/apiCalls";
+import { deleteTodoList, fetchTodos, updateTodoList } from "../utils/apiCalls";
+import { EditBox } from "./EditBox";
+import { Overlay } from "./Overlay";
 
 export const TodoListCard = ({ todoList, setSavedTodoLists }) => {
   const [todosToUpdate, setTodosToUpdate] = useState([...todoList.todos]);
+  const [editMode, setEditMode] = useState(false);
 
   const hasListChanged = (loadedTodo, stateTodo) => {
     for (var i = 0; i < loadedTodo.length; i++) {
@@ -20,7 +23,7 @@ export const TodoListCard = ({ todoList, setSavedTodoLists }) => {
   useEffect(() => {});
 
   return (
-    <div className="relative group bg-gray-50 rounded-xl w-[300px] px-4 pt-6 pb-4 shadow-md transition duration-300 hover:shadow-xl flex flex-col">
+    <div className="group bg-gray-50 rounded-xl w-[300px] px-4 pt-6 pb-4 shadow-md transition duration-300 hover:shadow-xl flex flex-col">
       <h2 className="px-3 text-lg font-semibold">{todoList.title}</h2>
       <div className="w-full p-4">
         {todosToUpdate.map((todo, index) => {
@@ -34,18 +37,27 @@ export const TodoListCard = ({ todoList, setSavedTodoLists }) => {
                   type="checkbox"
                   checked={todo.completed}
                   className="w-4 h-4 mt-1 text-yellow-400 border-gray-300 rounded cursor-pointer focus:ring-gray-500"
-                  onChange={(e) =>
-                    setTodosToUpdate([
+                  onChange={async (e) => {
+                    const newTodos = [
                       ...todosToUpdate.slice(0, index),
                       {
                         ...todosToUpdate[index],
                         completed: !todo.completed,
                       },
                       ...todosToUpdate.slice(index + 1),
-                    ])
-                  }
+                    ];
+                    setTodosToUpdate(newTodos);
+                    const payload = {
+                      title: todoList.title,
+                      todos: newTodos,
+                      dateLastEdited: new Date(),
+                    };
+
+                    await updateTodoList(todoList._id, payload);
+                  }}
                 />
                 <span
+                  onClick={() => setEditMode(!editMode)}
                   className={`w-5/6 ${
                     todo.completed ? "line-through text-gray-400" : ""
                   } `}
@@ -86,9 +98,11 @@ export const TodoListCard = ({ todoList, setSavedTodoLists }) => {
           </button>
         </div>
       </div>
-      <div className="absolute -top-2 -left-3 h-6 w-6">
-        <CheckCircleIcon className="w-full h-full text-gray-800 opacity-0 transition duration-300 group-hover:opacity-100" />
-      </div>
+      <EditBox
+        todoList={todoList}
+        editMode={editMode}
+        setEditMode={setEditMode}
+      />
     </div>
   );
 };

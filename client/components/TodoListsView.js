@@ -7,8 +7,6 @@ import {
 } from "@heroicons/react/outline";
 import ReactTooltip from "react-tooltip";
 import { debounce } from "lodash";
-import { TodoListCard } from "./TodoListCard";
-import { Loading } from "./Loading";
 import { fetchTodos, postTodoList, updateTodoList } from "../utils/apiCalls";
 import { SavedTodoLists } from "./SavedTodoLists";
 
