@@ -1,14 +1,13 @@
 import { SaveIcon, TrashIcon } from "@heroicons/react/outline";
-import { CheckCircleIcon } from "@heroicons/react/solid";
 import { useEffect, useState } from "react";
 import ReactTooltip from "react-tooltip";
 
 import { deleteTodoList, fetchTodos, updateTodoList } from "../utils/apiCalls";
 import { EditBox } from "./EditBox";
-import { Overlay } from "./Overlay";
 
 export const TodoListCard = ({ todoList, setSavedTodoLists }) => {
   const [todosToUpdate, setTodosToUpdate] = useState([...todoList.todos]);
+  const [listTitle, setListTitle] = useState(todoList.title);
   const [editMode, setEditMode] = useState(false);
 
   const hasListChanged = (loadedTodo, stateTodo) => {
@@ -24,7 +23,12 @@ export const TodoListCard = ({ todoList, setSavedTodoLists }) => {
 
   return (
     <div className="group bg-gray-50 rounded-xl w-[300px] px-4 pt-6 pb-4 shadow-md transition duration-300 hover:shadow-xl flex flex-col">
-      <h2 className="px-3 text-lg font-semibold">{todoList.title}</h2>
+      <h2
+        onClick={() => setEditMode(!editMode)}
+        className="px-3 text-lg font-semibold"
+      >
+        {listTitle}
+      </h2>
       <div className="w-full p-4">
         {todosToUpdate.map((todo, index) => {
           return (
@@ -48,7 +52,7 @@ export const TodoListCard = ({ todoList, setSavedTodoLists }) => {
                     ];
                     setTodosToUpdate(newTodos);
                     const payload = {
-                      title: todoList.title,
+                      title: listTitle,
                       todos: newTodos,
                       dateLastEdited: new Date(),
                     };
@@ -102,9 +106,11 @@ export const TodoListCard = ({ todoList, setSavedTodoLists }) => {
         todosToUpdate={todosToUpdate}
         setTodosToUpdate={setTodosToUpdate}
         listId={todoList._id}
-        listTitle={todoList.title}
+        listTitle={listTitle}
+        setListTitle={setListTitle}
         editMode={editMode}
         setEditMode={setEditMode}
+        setSavedTodoLists={setSavedTodoLists}
       />
     </div>
   );

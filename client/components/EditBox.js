@@ -11,18 +11,14 @@ export const EditBox = ({
   setEditMode,
 }) => {
   const editBoxRef = useRef();
+  const DEBOUNCED_TIME = 750; // Em ms
 
-  const handleChange = async (newTodos) => {
-    const payload = {
-      title: listTitle,
-      todos: newTodos,
-      dateLastEdited: new Date(),
-    };
+  const handleChange = async (payload) => {
     await updateTodoList(listId, payload);
   };
 
   const debouncedHandleChange = useMemo(
-    (newTodos) => debounce(handleChange, 300),
+    (payload) => debounce(handleChange, DEBOUNCED_TIME),
     [listId]
   );
   const handleClick = (e) => {
@@ -41,6 +37,31 @@ export const EditBox = ({
         <div className="p-8 flex flex-col space-y-8">
           <div className="flex items-center justify-between w-full">
             <h2 className="text-xl font-semibold">{listTitle}</h2>
+            <input
+              type="text"
+              defaultValue={listTitle}
+              className="text-xl font-semibold bg-transparent w-5/6 focus:outline-none focus:ring-transparent border-0"
+              onChange={async (e) => {
+                setSavingStatus({
+                  message: "Saving...",
+                  date: false,
+                });
+                const newTitle = e.target.value;
+                const payload = {
+                  title: newTitle,
+                  todos: todosToUpdate,
+                  dateLastEdited: new Date(),
+                };
+                setListTitle(newTitle);
+                debouncedHandleChange(payload);
+                setInterval(() => {
+                  setSavingStatus({
+                    message: "Last Edited at:",
+                    date: new Date(),
+                  });
+                }, DEBOUNCED_TIME);
+              }}
+            />
             <p className="font-mono text-gray-500">Edit Mode</p>
           </div>
           <div className="border-b-px border-gray-400">
@@ -92,6 +113,41 @@ export const EditBox = ({
                       debouncedHandleChange(newTodos);
                     }}
                   />
+                  <div className="group flex h-full w-full justify-between items-center">
+                    <input
+                      type="text"
+                      className={`bg-transparent w-full focus:outline-none focus:ring-transparent border-0 ${
+                        todo.completed ? "line-through" : ""
+                      }`}
+                      defaultValue={todo.content}
+                      onChange={async (e) => {
+                        setSavingStatus({
+                          date: null,
+                          message: "Saving...",
+                        });
+                        const newTodos = [
+                          ...todosToUpdate.slice(0, index),
+                          {
+                            ...todosToUpdate[index],
+                            content: e.target.value,
+                          },
+                          ...todosToUpdate.slice(index + 1),
+                        ];
+                        setTodosToUpdate(newTodos);
+                        const payload = {
+                          title: listTitle,
+                          todos: newTodos,
+                          dateLastEdited: new Date(),
+                        };
+                        debouncedHandleChange(payload);
+                        setInterval(() => {
+                          setSavingStatus({
+                            date: new Date(),
+                            message: "Last Edited at:",
+                          });
+                        }, DEBOUNCED_TIME);
+                      }}
+                    />
                 </div>
               );
             })}

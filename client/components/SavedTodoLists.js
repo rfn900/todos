@@ -3,8 +3,6 @@ import { TodoListCard } from "./TodoListCard";
 import { Loading } from "./Loading";
 
 export const SavedTodoLists = ({ savedTodoLists, setSavedTodoLists }) => {
-  useEffect(() => {}, []);
-
   return (
     <>
       {savedTodoLists ? (
