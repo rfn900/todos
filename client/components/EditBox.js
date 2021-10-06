@@ -14,7 +14,7 @@ export const EditBox = ({
   setSavingStatus,
 }) => {
   const editBoxRef = useRef();
-  const DEBOUNCED_TIME = 750; // Em ms
+  const DEBOUNCED_TIME = 1500; // Em ms
 
   const handleChange = async (payload) => {
     await updateTodoList(listId, payload);
@@ -53,7 +53,7 @@ export const EditBox = ({
                 };
                 setListTitle(newTitle);
                 debouncedHandleChange(payload);
-                setInterval(() => {
+                setTimeout(() => {
                   setSavingStatus({
                     message: "Last Edited at:",
                     date: new Date(),
@@ -107,7 +107,7 @@ export const EditBox = ({
                       className={`bg-transparent w-full focus:outline-none focus:ring-transparent border-0 ${
                         todo.completed ? "line-through" : ""
                       }`}
-                      defaultValue={todo.content}
+                      value={todo.content || ""}
                       onChange={async (e) => {
                         setSavingStatus({
                           date: null,
@@ -128,7 +128,7 @@ export const EditBox = ({
                           dateLastEdited: new Date(),
                         };
                         debouncedHandleChange(payload);
-                        setInterval(() => {
+                        setTimeout(() => {
                           setSavingStatus({
                             date: new Date(),
                             message: "Last Edited at:",
@@ -154,7 +154,7 @@ export const EditBox = ({
                           dateLastEdited: new Date(),
                         };
                         debouncedHandleChange(payload);
-                        setInterval(() => {
+                        setTimeout(() => {
                           setSavingStatus({
                             date: new Date(),
                             message: "Last Edited at:",

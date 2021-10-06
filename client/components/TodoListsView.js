@@ -33,6 +33,7 @@ export const TodoListsView = () => {
     setActiveList(_id);
     console.log(_id);
   };
+  const DEBOUNCED_TIME = 1500;
 
   const handleChange = async (newTodos) => {
     const payload = {
@@ -45,7 +46,7 @@ export const TodoListsView = () => {
   };
 
   const debouncedHandleChange = useMemo(
-    (newTodos) => debounce(handleChange, 300),
+    (newTodos) => debounce(handleChange, DEBOUNCED_TIME),
     [activeList]
   );
 
