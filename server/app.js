@@ -5,7 +5,9 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const todosRouter = require("./routes/todos");
 const usersRouter = require("./routes/users");
+const authRouter = require("./routes/auth");
 const mongoose = require("mongoose");
+const passport = require("passport");
 const session = require("express-session");
 
 const app = express();
@@ -25,6 +27,10 @@ app.use(
     saveUninitialized: true,
   })
 );
+// Passport
+app.use(passport.initialize());
+app.use(passport.session());
+
 mongoose
   .connect(process.env.DATABASE, {
     useNewUrlParser: true,
@@ -34,6 +40,11 @@ mongoose
   .catch((error) => console.log(error));
 
 app.use("/api/v1/todos", todosRouter);
-app.use("/api/v1/users", usersRouter);
+app.use("/users", usersRouter);
+app.use("/auth", authRouter);
+
+app.get("/", function (req, res, next) {
+  res.send("ok");
+});
 
 module.exports = app;
