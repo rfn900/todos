@@ -10,6 +10,8 @@ export const EditBox = ({
   setListTitle,
   editMode,
   setEditMode,
+  savingStatus,
+  setSavingStatus,
 }) => {
   const editBoxRef = useRef();
   const DEBOUNCED_TIME = 750; // Em ms
@@ -71,7 +73,12 @@ export const EditBox = ({
                   <input
                     className="w-4 h-4 text-yellow-600 bg-transparent border-gray-500 rounded cursor-pointer focus:ring-gray-500"
                     type="checkbox"
+                    checked={todo.completed}
                     onChange={async (e) => {
+                      setSavingStatus({
+                        date: null,
+                        message: "Saving...",
+                      });
                       const newTodos = [
                         ...todosToUpdate.slice(0, index),
                         {
@@ -88,6 +95,10 @@ export const EditBox = ({
                       };
 
                       await updateTodoList(listId, payload);
+                      setSavingStatus({
+                        date: new Date(),
+                        message: "Last Edited at:",
+                      });
                     }}
                   />
                   <div className="group flex h-full w-full justify-between items-center">
@@ -126,6 +137,11 @@ export const EditBox = ({
                       }}
                     />
                     <XIcon
+                      onClick={(e) => {
+                        setSavingStatus({
+                          date: null,
+                          message: "Saving...",
+                        });
                         const newTodos = [
                           //immutable delete
                           ...todosToUpdate.slice(0, index),
@@ -152,7 +168,7 @@ export const EditBox = ({
               );
             })}
           </div>
-          <div className="w-full">
+          <div className="w-full flex items-center justify-between">
             <PlusIcon
               onClick={(e) =>
                 setTodosToUpdate([
@@ -165,6 +181,13 @@ export const EditBox = ({
               }
               className="h-8 hover:bg-yellow-400 hover:bg-opacity-50 cursor-pointer transition rounded-full p-1 text-gray-500"
             />
+            <div className="block text-gray-500 font-mono">
+              <p className="text-sm">{savingStatus.message}</p>
+              <p className="text-xs">
+                {savingStatus.date &&
+                  new Date(savingStatus.date).toLocaleString()}
+              </p>
+            </div>
           </div>
         </div>
       </div>

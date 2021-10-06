@@ -9,6 +9,10 @@ export const TodoListCard = ({ todoList, setSavedTodoLists }) => {
   const [todosToUpdate, setTodosToUpdate] = useState([...todoList.todos]);
   const [listTitle, setListTitle] = useState(todoList.title);
   const [editMode, setEditMode] = useState(false);
+  const [savingStatus, setSavingStatus] = useState({
+    date: todoList.dateLastEdited,
+    message: "Last edited at:",
+  });
 
   const hasListChanged = (loadedTodo, stateTodo) => {
     for (var i = 0; i < loadedTodo.length; i++) {
@@ -42,6 +46,11 @@ export const TodoListCard = ({ todoList, setSavedTodoLists }) => {
                   checked={todo.completed}
                   className="w-4 h-4 mt-1 text-yellow-400 border-gray-300 rounded cursor-pointer focus:ring-gray-500"
                   onChange={async (e) => {
+                    setSavingStatus({
+                      date: false,
+                      message: "Saving...",
+                    });
+
                     const newTodos = [
                       ...todosToUpdate.slice(0, index),
                       {
@@ -58,6 +67,10 @@ export const TodoListCard = ({ todoList, setSavedTodoLists }) => {
                     };
 
                     await updateTodoList(todoList._id, payload);
+                    setSavingStatus({
+                      date: new Date(),
+                      message: "Last edited at:",
+                    });
                   }}
                 />
                 <span
@@ -74,18 +87,14 @@ export const TodoListCard = ({ todoList, setSavedTodoLists }) => {
         })}
       </div>
       <div className="w-full h-10 px-2 mt-auto  bg-gray-50">
-        <div className="flex items-start justify-between w-full h-full opacity-0 transition duration-300 group-hover:opacity-100">
-          <ReactTooltip />
-          <button
-            data-tip="Save Changes"
-            data-type="dark"
-            data-place="bottom"
-            data-effect="solid"
-            disabled={!hasListChanged(todoList.todos, todosToUpdate)}
-            className="flex items-center justify-center w-12 h-12 rounded-full hover:shadow hover:bg-gray-100 disabled:shadow-none disabled:cursor-default disabled:bg-transparent disabled:opacity-40"
-          >
-            <SaveIcon className="h-6 text-gray-500" />
-          </button>
+        <div className="flex items-center justify-between w-full h-full opacity-0 transition duration-300 group-hover:opacity-100">
+          <div className="block text-gray-500 font-mono">
+            <p className="text-sm">{savingStatus.message}</p>
+            <p className="text-xs">
+              {savingStatus.date &&
+                new Date(savingStatus.date).toLocaleString()}
+            </p>
+          </div>
           <ReactTooltip />
           <button
             data-tip="Delete Todo List"
@@ -111,6 +120,8 @@ export const TodoListCard = ({ todoList, setSavedTodoLists }) => {
         editMode={editMode}
         setEditMode={setEditMode}
         setSavedTodoLists={setSavedTodoLists}
+        savingStatus={savingStatus}
+        setSavingStatus={setSavingStatus}
       />
     </div>
   );
