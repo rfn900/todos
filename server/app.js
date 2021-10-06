@@ -6,6 +6,7 @@ const dotenv = require("dotenv");
 const todosRouter = require("./routes/todos");
 const usersRouter = require("./routes/users");
 const mongoose = require("mongoose");
+const session = require("express-session");
 
 const app = express();
 
@@ -17,6 +18,13 @@ app.use(cookieParser());
 
 dotenv.config();
 
+app.use(
+  session({
+    secret: "wet cat",
+    resave: true,
+    saveUninitialized: true,
+  })
+);
 mongoose
   .connect(process.env.DATABASE, {
     useNewUrlParser: true,
