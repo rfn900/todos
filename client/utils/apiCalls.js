@@ -2,14 +2,16 @@ import axios from "axios";
 
 export const fetchTodos = (item = "") => {
   return axios
-    .get(`${process.env.BACKEND_URL}/todos/${item}`)
+    .get(`${process.env.BACKEND_URL}/todos/${item}`, { withCredentials: true })
     .then((res) => res.data)
     .then((data) => Promise.resolve(data));
 };
 
 export const postTodoList = async (payload) => {
   try {
-    const res = await axios.post(`${process.env.BACKEND_URL}/todos`, payload);
+    const res = await axios.post(`${process.env.BACKEND_URL}/todos`, payload, {
+      withCredentials: true,
+    });
     return res.data;
   } catch (e) {
     /* handle error */
