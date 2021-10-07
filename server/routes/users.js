@@ -9,8 +9,9 @@ router.get("/login", function (req, res, next) {
 });
 
 router.get("/", async function (req, res, next) {
-  const users = await Users.find();
-  res.json(users);
+  const user = req.user;
+  console.log(user);
+  res.json(user);
 });
 
 router.get("/:id", async function (req, res, next) {

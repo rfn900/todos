@@ -10,7 +10,8 @@ import { debounce } from "lodash";
 import { fetchTodos, postTodoList, updateTodoList } from "../utils/apiCalls";
 import { SavedTodoLists } from "./SavedTodoLists";
 
-export const TodoListsView = () => {
+export const TodoListsView = ({ user }) => {
+  console.log(user);
   const [todos, setTodos] = useState(null);
   const [savedTodoLists, setSavedTodoLists] = useState(null);
   const [activeList, setActiveList] = useState(null);

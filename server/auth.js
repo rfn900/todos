@@ -21,7 +21,7 @@ passport.use(
         imageUrl: profile.photos[0].value,
         registerDate: new Date(),
       };
-
+      console.log(profile.photos[0].value);
       try {
         if (user) {
           done(null, user);

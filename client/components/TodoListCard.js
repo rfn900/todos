@@ -119,7 +119,6 @@ export const TodoListCard = ({ todoList, setSavedTodoLists }) => {
         setListTitle={setListTitle}
         editMode={editMode}
         setEditMode={setEditMode}
-        setSavedTodoLists={setSavedTodoLists}
         savingStatus={savingStatus}
         setSavingStatus={setSavingStatus}
       />
