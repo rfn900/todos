@@ -31,7 +31,9 @@ export const Nav = () => {
           <div>
             <a href="/profile">Profile</a>
           </div>
-          <div>Logout</div>
+          <div>
+            <a href="http://localhost:5000/auth/logout">Logout</a>
+          </div>
         </div>
       </div>
     </nav>

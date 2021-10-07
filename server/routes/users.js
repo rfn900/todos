@@ -10,7 +10,6 @@ router.get("/login", function (req, res, next) {
 
 router.get("/", async function (req, res, next) {
   const user = req.user;
-  console.log(user);
   res.json(user);
 });
 

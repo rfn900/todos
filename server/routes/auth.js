@@ -14,9 +14,11 @@ router.get(
   "/google/callback",
   passport.authenticate("google", { failureRedirect: "/users/login" }),
   function (req, res) {
-    console.log(req.session);
     res.redirect("http://localhost:3000");
   }
 );
 
+router.get("/logout", function (req, res) {
+  req.session.destroy((err) => res.redirect("http://localhost:3000/login"));
+});
 module.exports = router;
