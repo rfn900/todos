@@ -12,6 +12,18 @@ const session = require("express-session");
 
 const app = express();
 
+const auth = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    next();
+  } else {
+    res.statusCode = 403;
+    res.json({
+      status: "error",
+      message: "You need to be logged in to view this resource",
+    });
+  }
+};
+
 app.use(logger("dev"));
 app.use(
   cors({
@@ -31,12 +43,15 @@ app.use(
     secret: "wet cat",
     resave: true,
     saveUninitialized: true,
+    cookie: {
+      maxAge: 3600000,
+    },
   })
 );
 // Passport
 app.use(passport.initialize());
 app.use(passport.session());
-
+app.use("/api/v1", auth);
 mongoose
   .connect(process.env.DATABASE, {
     useNewUrlParser: true,

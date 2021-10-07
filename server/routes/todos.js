@@ -1,10 +1,12 @@
 const express = require("express");
 const router = express.Router();
 const TodoLists = require("../models/todoLists");
+const auth = require("../middlewares/auth");
 
 /* GET home page. */
 router.get("/", async function (req, res, next) {
   const todoLists = await TodoLists.find();
+  res.statusCode = 200;
   res.json(todoLists);
 });
 

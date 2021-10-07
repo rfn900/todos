@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 
 const TodoListsSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.ObjectId,
+    required: true,
+  },
   title: {
     type: String,
     required: true,
