@@ -46,7 +46,7 @@ mongoose
   .catch((error) => console.log(error));
 
 app.use("/api/v1/todos", todosRouter);
-app.use("/users", usersRouter);
+app.use("/api/v1/users", usersRouter);
 app.use("/auth", authRouter);
 
 app.get("/", function (req, res, next) {
