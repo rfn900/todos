@@ -2,11 +2,17 @@ import { useEffect, useState } from "react";
 import { TodoListCard } from "./TodoListCard";
 import { Loading } from "./Loading";
 
+import Masonry from "react-masonry-css";
 export const SavedTodoLists = ({ savedTodoLists, setSavedTodoLists }) => {
+  const howManyTodos = savedTodoLists ? savedTodoLists.length : 0;
   return (
     <>
       {savedTodoLists ? (
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 mt-12 sm:mt-24">
+        <Masonry
+          breakpointCols={howManyTodos < 3 ? howManyTodos : 3}
+          className="my-masonry-grid"
+          columnClassName="my-masonry-grid_column"
+        >
           {savedTodoLists.map((list) => {
             return (
               <TodoListCard
@@ -16,7 +22,7 @@ export const SavedTodoLists = ({ savedTodoLists, setSavedTodoLists }) => {
               />
             );
           })}
-        </div>
+        </Masonry>
       ) : (
         <Loading />
       )}
