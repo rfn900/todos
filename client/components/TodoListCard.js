@@ -14,17 +14,6 @@ export const TodoListCard = ({ todoList, setSavedTodoLists }) => {
     message: "Last edited at:",
   });
 
-  const hasListChanged = (loadedTodo, stateTodo) => {
-    for (var i = 0; i < loadedTodo.length; i++) {
-      if (loadedTodo[i].completed !== stateTodo[i].completed) return true;
-      if (loadedTodo[i].content !== stateTodo[i].content) return true;
-    }
-
-    return false;
-  };
-
-  useEffect(() => {});
-
   return (
     <div className="group bg-gray-50 rounded-xl w-[300px] px-4 pt-6 pb-4 shadow-md transition duration-300 hover:shadow-xl flex flex-col">
       <h2
