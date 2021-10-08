@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const TodoLists = require("../models/todoLists");
-const auth = require("../middlewares/auth");
 
 /* GET home page. */
 router.get("/", async function (req, res, next) {
-  const todoLists = await TodoLists.find();
+  const todoLists = await TodoLists.find({ userId: req.user._id });
+  console.log(req.user);
   res.statusCode = 200;
   res.json(todoLists);
 });
@@ -17,9 +17,10 @@ router.get("/:id", async function (req, res, next) {
 });
 
 router.post("/", async function (req, res, next) {
-  const { todos, title, dateLastEdited } = req.body;
+  const { userId, todos, title, dateLastEdited } = req.body;
 
   const payload = {
+    userId,
     title,
     todos,
     dateLastEdited,
@@ -27,9 +28,8 @@ router.post("/", async function (req, res, next) {
   let todoList = new TodoLists(payload);
 
   try {
-    console.log(todoList);
     await todoList.save();
-    res.status(200);
+    res.statusCode = 200;
     res.json({
       _id: todoList._id,
     });
