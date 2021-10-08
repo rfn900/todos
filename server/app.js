@@ -9,20 +9,8 @@ const authRouter = require("./routes/auth");
 const mongoose = require("mongoose");
 const passport = require("passport");
 const session = require("express-session");
-
+const auth = require("./middlewares/auth");
 const app = express();
-
-const auth = (req, res, next) => {
-  if (req.isAuthenticated()) {
-    next();
-  } else {
-    res.statusCode = 403;
-    res.json({
-      status: "error",
-      message: "You need to be logged in to view this resource",
-    });
-  }
-};
 
 app.use(logger("dev"));
 app.use(
