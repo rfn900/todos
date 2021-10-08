@@ -10,10 +10,12 @@ import { debounce } from "lodash";
 import { fetchTodos, postTodoList, updateTodoList } from "../utils/apiCalls";
 import { SavedTodoLists } from "./SavedTodoLists";
 
+import { useUser } from "../context/user";
 export const TodoListsView = () => {
   const [todos, setTodos] = useState(null);
   const [savedTodoLists, setSavedTodoLists] = useState(null);
   const [activeList, setActiveList] = useState(null);
+  const user = useUser();
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newTodoListContent = [
@@ -24,6 +26,7 @@ export const TodoListsView = () => {
     ];
     setTodos(newTodoListContent);
     const payload = {
+      userId: user._id,
       title: listInputRef.current.value,
       todos: newTodoListContent,
       dateLastEdited: new Date(),
@@ -31,7 +34,6 @@ export const TodoListsView = () => {
 
     const { _id } = await postTodoList(payload);
     setActiveList(_id);
-    console.log(_id);
   };
   const DEBOUNCED_TIME = 1500;
 
