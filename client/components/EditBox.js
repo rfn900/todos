@@ -29,7 +29,7 @@ export const EditBox = ({
     <div
       ref={editBoxRef}
       onClick={(e) => editBoxRef.current === e.target && setEditMode(!editMode)}
-      className={`absolute inset-0 bg-gray-700 bg-opacity-30 z-10 ${
+      className={`fixed inset-0 bg-gray-700 bg-opacity-30 z-10 ${
         editMode ? "" : "hidden"
       }`}
     >
