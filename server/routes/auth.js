@@ -21,4 +21,10 @@ router.get(
 router.get("/logout", function (req, res) {
   req.session.destroy((err) => res.redirect("http://localhost:3000/login"));
 });
+
+router.get("/check", function (req, res) {
+  res.json({
+    isAuthenticated: req.isAuthenticated(),
+  });
+});
 module.exports = router;

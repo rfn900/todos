@@ -22,7 +22,8 @@ export const updateTodoList = async (listId, payload) => {
   try {
     const res = await axios.put(
       `${process.env.BACKEND_URL}/todos/${listId}`,
-      payload
+      payload,
+      { withCredentials: true }
     );
     return res.data;
   } catch (e) {
@@ -33,7 +34,8 @@ export const updateTodoList = async (listId, payload) => {
 export const deleteTodoList = async (listId) => {
   try {
     const res = await axios.delete(
-      `${process.env.BACKEND_URL}/todos/${listId}`
+      `${process.env.BACKEND_URL}/todos/${listId}`,
+      { withCredentials: true }
     );
     return res.data;
   } catch (e) {
@@ -50,4 +52,11 @@ export const fetchLoggedUser = async () => {
   } catch (e) {
     /* handle error */
   }
+};
+
+export const isLoggedIn = async () => {
+  const res = await axios.get("http://localhost:5000/auth/check", {
+    withCredentials: true,
+  });
+  return res.data.isAuthenticated;
 };
