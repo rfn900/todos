@@ -1,8 +1,13 @@
-import { DocumentAddIcon } from "@heroicons/react/outline";
-import ReactTooltip from "react-tooltip";
-export const FormAddTodoList = ({ handleSubmit, listInputRef, todos }) => {
+import { DocumentTextIcon, DocumentAddIcon } from "@heroicons/react/outline";
+import { ButtonMainForm } from "./ButtonMainForm";
+export const FormAddTodoList = ({
+  handleListClick,
+  listInputRef,
+  disable,
+  handleNoteClick,
+}) => {
   return (
-    <form onSubmit={handleSubmit} className="">
+    <form onSubmit={(e) => e.preventDefault()} className="">
       <div className="flex justify-between w-full px-4">
         <input
           ref={listInputRef}
@@ -12,22 +17,19 @@ export const FormAddTodoList = ({ handleSubmit, listInputRef, todos }) => {
           name="todo_add"
           placeholder="Todo List Title..."
         />
-        <ReactTooltip />
-        <button
-          disabled={todos ? true : false}
-          data-tip="Add New List"
-          data-type="dark"
-          data-place="bottom"
-          data-effect="solid"
-          type="submit"
-          className={`flex items-center justify-center p-4 rounded-full transition ${
-            todos ? "cursor-default" : "hover:bg-gray-50"
-          }`}
-        >
-          <DocumentAddIcon
-            className={`h-6 w-6 text-gray-500 ${todos ? "opacity-50" : ""}`}
-          />
-        </button>
+        <ButtonMainForm
+          toolTipText="Add Todo Note"
+          eventHandler={handleNoteClick}
+          disable={disable}
+          Icon={DocumentTextIcon}
+        />
+
+        <ButtonMainForm
+          toolTipText="Add Todo List Item"
+          eventHandler={handleListClick}
+          disable={disable}
+          Icon={DocumentAddIcon}
+        />
       </div>
     </form>
   );

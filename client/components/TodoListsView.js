@@ -1,21 +1,29 @@
 import { useState, useEffect, useRef, useMemo } from "react";
-import { PlusIcon, ViewGridAddIcon } from "@heroicons/react/outline";
+import {
+  PlusCircleIcon,
+  PlusIcon,
+  ViewGridAddIcon,
+  XCircleIcon,
+} from "@heroicons/react/outline";
 import ReactTooltip from "react-tooltip";
 import { debounce } from "lodash";
 import { fetchTodos, postTodoList, updateTodoList } from "../utils/apiCalls";
 import { SavedTodoLists } from "./SavedTodoLists";
 
+import { MDEditor } from "./Markdown";
 import { useUser } from "../context/user";
 import { TextInput } from "./TextInput";
 import { DeleteIcon } from "./DeleteIcon";
 import { Checkbox } from "./Checkbox";
 import { FormAddTodoList } from "./FormAddTodoList";
+import { ButtonMainForm } from "./ButtonMainForm";
 export const TodoListsView = () => {
   const [todos, setTodos] = useState(null);
+  const [todoMDText, setTodoMDText] = useState(null);
   const [savedTodoLists, setSavedTodoLists] = useState(null);
   const [activeList, setActiveList] = useState(null);
   const user = useUser();
-  const handleSubmit = async (e) => {
+  const handleListClick = async (e) => {
     e.preventDefault();
     const newTodoListContent = [
       {
@@ -61,10 +69,34 @@ export const TodoListsView = () => {
     <div className="flex flex-col pb-8 items-center justify-center w-full px-8 mt-12 sm:px-0">
       <div className="w-full border-2 border-gray-300 shadow-md sm:w-1/2 rounded-xl">
         <FormAddTodoList
-          todos={todos}
-          handleSubmit={handleSubmit}
+          disable={todos || todoMDText ? true : false}
+          handleListClick={handleListClick}
           listInputRef={listInputRef}
+          handleNoteClick={() =>
+            setTodoMDText(`# ${listInputRef.current.value}`)
+          }
         />
+        {todoMDText && (
+          <>
+            <div className="w-full">
+              <MDEditor value={todoMDText} onChange={setTodoMDText} />
+            </div>
+            <div className="flex items-center justify-between w-full px-4 py-4">
+              <ButtonMainForm
+                toolTipText="Clear Note"
+                disable={false}
+                eventHandler={() => setTodoMDText(null)}
+                Icon={XCircleIcon}
+              />
+              <ButtonMainForm
+                toolTipText="Add Note to View"
+                disable={false}
+                eventHandler={() => console.log(listInputRef.current.value)}
+                Icon={ViewGridAddIcon}
+              />
+            </div>
+          </>
+        )}
         {todos && (
           <>
             {todos.map((todo, index) => {
@@ -102,8 +134,10 @@ export const TodoListsView = () => {
               );
             })}
             <div className="flex items-center justify-between w-full px-4 py-4">
-              <button
-                onClick={() => {
+              <ButtonMainForm
+                toolTipText="Add New List Item"
+                disable={false}
+                eventHandler={() => {
                   setTodos([
                     ...todos,
                     {
@@ -112,27 +146,19 @@ export const TodoListsView = () => {
                     },
                   ]);
                 }}
-                className="flex w-auto px-4 text-gray-500 rounded-full hover:bg-gray-50"
-              >
-                Add New Item
-              </button>
-              <ReactTooltip />
-              <button
-                data-tip="Add List to View"
-                data-type="dark"
-                data-place="bottom"
-                data-effect="solid"
-                type="submit"
-                className={`flex items-center p-2 mr-2 justify-center rounded-full transition hover:bg-gray-50`}
-                onClick={() => {
+                Icon={PlusCircleIcon}
+              />
+              <ButtonMainForm
+                toolTipText="Add List to View"
+                disable={false}
+                eventHandler={() => {
                   fetchTodos().then(setSavedTodoLists);
                   setTodos(null);
                   console.log(todos);
                   listInputRef.current.value = "";
                 }}
-              >
-                <ViewGridAddIcon className="w-6 h-6 text-gray-400" />
-              </button>
+                Icon={ViewGridAddIcon}
+              />
             </div>
           </>
         )}
