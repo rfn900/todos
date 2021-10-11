@@ -5,11 +5,15 @@ import {
   ViewGridAddIcon,
   XCircleIcon,
 } from "@heroicons/react/outline";
-import ReactTooltip from "react-tooltip";
 import { debounce } from "lodash";
-import { fetchTodos, postTodoList, updateTodoList } from "../utils/apiCalls";
-import { SavedTodoLists } from "./SavedTodoLists";
 
+import {
+  fetchTodos,
+  postTodos,
+  updateTodos,
+  deleteTodos,
+} from "../utils/apiCalls";
+import { SavedTodoLists } from "./SavedTodoLists";
 import { MDEditor } from "./Markdown";
 import { useUser } from "../context/user";
 import { TextInput } from "./TextInput";
@@ -21,10 +25,13 @@ export const TodoListsView = () => {
   const [todos, setTodos] = useState(null);
   const [todoMDText, setTodoMDText] = useState(null);
   const [savedTodoLists, setSavedTodoLists] = useState(null);
+  const [savedTodoNotes, setSavedTodoNotes] = useState(null);
   const [activeList, setActiveList] = useState(null);
   const user = useUser();
+
   const handleListClick = async (e) => {
     e.preventDefault();
+    setTodoMDText(null);
     const newTodoListContent = [
       {
         content: "",
@@ -39,30 +46,42 @@ export const TodoListsView = () => {
       dateLastEdited: new Date(),
     };
 
-    const { _id } = await postTodoList(payload);
+    const { _id } = await postTodos(payload, "lists");
     setActiveList(_id);
   };
-  const DEBOUNCED_TIME = 350;
 
-  const handleChange = async (newTodos) => {
+  const handleNotesClick = async (e) => {
+    e.preventDefault();
+    setTodos(null);
+    const title = listInputRef.current.value;
+    setTodoMDText(`# ${title}`);
     const payload = {
-      title: listInputRef.current.value,
-      todos: newTodos,
+      userId: user._id,
+      notes: title,
       dateLastEdited: new Date(),
     };
-    console.log(activeList, payload);
-    await updateTodoList(activeList, payload);
+
+    const { _id } = await postTodos(payload, "notes");
+    setActiveList(_id);
   };
 
+  // Autosaving with debounce every 350 ms
+  const DEBOUNCED_TIME = 350;
+  const handleChange = async (payload) => {
+    const editType = todoMDText ? "notes" : "lists";
+    console.log(activeList, editType, payload);
+    await updateTodos(activeList, payload, editType);
+  };
   const debouncedHandleChange = useMemo(
-    (newTodos) => debounce(handleChange, DEBOUNCED_TIME),
+    (payload) => debounce(handleChange, DEBOUNCED_TIME),
     [activeList]
   );
 
   const listInputRef = useRef();
 
   useEffect(() => {
-    fetchTodos().then(setSavedTodoLists);
+    fetchTodos("lists").then(setSavedTodoLists);
+    fetchTodos("notes").then(setSavedTodoNotes);
   }, []);
 
   return (
@@ -72,9 +91,7 @@ export const TodoListsView = () => {
           disable={todos || todoMDText ? true : false}
           handleListClick={handleListClick}
           listInputRef={listInputRef}
-          handleNoteClick={() =>
-            setTodoMDText(`# ${listInputRef.current.value}`)
-          }
+          handleNotesClick={handleNotesClick}
         />
         {todoMDText && (
           <>
@@ -85,13 +102,24 @@ export const TodoListsView = () => {
               <ButtonMainForm
                 toolTipText="Clear Note"
                 disable={false}
-                eventHandler={() => setTodoMDText(null)}
+                eventHandler={async () => {
+                  listInputRef.current.value = "";
+                  setTodoMDText(null);
+                  deleteTodos(activeList, "notes");
+                }}
                 Icon={XCircleIcon}
               />
               <ButtonMainForm
                 toolTipText="Add Note to View"
                 disable={false}
-                eventHandler={() => console.log(listInputRef.current.value)}
+                eventHandler={() => {
+                  const payload = {
+                    notes: todoMDText,
+                    dateLastEdited: new Date(),
+                  };
+                  console.log(payload);
+                  debouncedHandleChange(payload);
+                }}
                 Icon={ViewGridAddIcon}
               />
             </div>
@@ -112,23 +140,66 @@ export const TodoListsView = () => {
                       <PlusIcon className="h-4 text-gray-400" />
                     ) : (
                       <Checkbox
-                        todos={todos}
-                        setTodos={setTodos}
-                        index={index}
+                        todo={todo}
+                        onChange={() => {
+                          {
+                            const newTodos = [
+                              //immutable update
+                              ...todos.slice(0, index),
+                              {
+                                ...todos[index],
+                                completed: !todo.completed,
+                              },
+                              ...todos.slice(index + 1),
+                            ];
+                            setTodos(newTodos);
+                            const payload = {
+                              title: listInputRef.current.value,
+                              content: newTodos,
+                              dateLastEdited: new Date(),
+                            };
+                            debouncedHandleChange(payload);
+                          }
+                        }}
                       />
                     )}
                     <TextInput
-                      todos={todos}
-                      setTodos={setTodos}
-                      debouncedHandleChange={debouncedHandleChange}
-                      index={index}
+                      todo={todo}
+                      onChange={async (e) => {
+                        const newTodos = [
+                          //immutable update
+                          ...todos.slice(0, index),
+                          {
+                            ...todos[index],
+                            content: e.target.value,
+                          },
+                          ...todos.slice(index + 1),
+                        ];
+                        setTodos(newTodos);
+                        const payload = {
+                          title: listInputRef.current.value,
+                          todos: newTodos,
+                          dateLastEdited: new Date(),
+                        };
+                        debouncedHandleChange(payload);
+                      }}
                     />
                   </div>
                   <DeleteIcon
-                    todos={todos}
-                    setTodos={setTodos}
-                    debouncedHandleChange={debouncedHandleChange}
-                    index={index}
+                    onClick={() => {
+                      const newTodos = [
+                        //immutable delete
+                        ...todos.slice(0, index),
+                        ...todos.slice(index + 1),
+                      ];
+                      setTodos(newTodos);
+                      const payload = {
+                        title: listInputRef.current.value,
+                        content: newTodos,
+                        dateLastEdited: new Date(),
+                      };
+                      debouncedHandleChange(payload);
+                    }}
                   />
                 </div>
               );
@@ -152,7 +223,7 @@ export const TodoListsView = () => {
                 toolTipText="Add List to View"
                 disable={false}
                 eventHandler={() => {
-                  fetchTodos().then(setSavedTodoLists);
+                  fetchTodos("lists").then(setSavedTodoLists);
                   setTodos(null);
                   console.log(todos);
                   listInputRef.current.value = "";
