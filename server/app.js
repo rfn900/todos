@@ -4,6 +4,7 @@ const logger = require("morgan");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const todosRouter = require("./routes/todos");
+const notesRouter = require("./routes/notes");
 const usersRouter = require("./routes/users");
 const authRouter = require("./routes/auth");
 const mongoose = require("mongoose");
@@ -40,6 +41,7 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 app.use("/api/v1", auth);
+
 mongoose
   .connect(process.env.DATABASE, {
     useNewUrlParser: true,
@@ -48,7 +50,8 @@ mongoose
   .then(() => console.log("connected to db"))
   .catch((error) => console.log(error));
 
-app.use("/api/v1/todos", todosRouter);
+app.use("/api/v1/todos/lists", todosRouter);
+app.use("/api/v1/todos/notes", notesRouter);
 app.use("/api/v1/users", usersRouter);
 app.use("/auth", authRouter);
 
