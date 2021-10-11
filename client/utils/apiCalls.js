@@ -1,27 +1,35 @@
 import axios from "axios";
 
-export const fetchTodos = (item = "") => {
+// type => list or notes
+
+export const fetchTodos = (type, item = "") => {
   return axios
-    .get(`${process.env.BACKEND_URL}/todos/${item}`, { withCredentials: true })
+    .get(`${process.env.BACKEND_URL}/todos/${type}/${item}`, {
+      withCredentials: true,
+    })
     .then((res) => res.data)
     .then((data) => Promise.resolve(data));
 };
 
-export const postTodoList = async (payload) => {
+export const postTodos = async (payload, type) => {
   try {
-    const res = await axios.post(`${process.env.BACKEND_URL}/todos`, payload, {
-      withCredentials: true,
-    });
+    const res = await axios.post(
+      `${process.env.BACKEND_URL}/todos/${type}`,
+      payload,
+      {
+        withCredentials: true,
+      }
+    );
     return res.data;
   } catch (e) {
     /* handle error */
   }
 };
 
-export const updateTodoList = async (listId, payload) => {
+export const updateTodos = async (id, payload, type) => {
   try {
     const res = await axios.put(
-      `${process.env.BACKEND_URL}/todos/${listId}`,
+      `${process.env.BACKEND_URL}/todos/${type}/${id}`,
       payload,
       { withCredentials: true }
     );
@@ -31,11 +39,13 @@ export const updateTodoList = async (listId, payload) => {
   }
 };
 
-export const deleteTodoList = async (listId) => {
+export const deleteTodos = async (id, type) => {
   try {
     const res = await axios.delete(
-      `${process.env.BACKEND_URL}/todos/${listId}`,
-      { withCredentials: true }
+      `${process.env.BACKEND_URL}/todos/${type}/${id}`,
+      {
+        withCredentials: true,
+      }
     );
     return res.data;
   } catch (e) {

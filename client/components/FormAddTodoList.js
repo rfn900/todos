@@ -4,7 +4,7 @@ export const FormAddTodoList = ({
   handleListClick,
   listInputRef,
   disable,
-  handleNoteClick,
+  handleNotesClick,
 }) => {
   return (
     <form onSubmit={(e) => e.preventDefault()} className="">
@@ -19,7 +19,7 @@ export const FormAddTodoList = ({
         />
         <ButtonMainForm
           toolTipText="Add Todo Note"
-          eventHandler={handleNoteClick}
+          eventHandler={handleNotesClick}
           disable={disable}
           Icon={DocumentTextIcon}
         />

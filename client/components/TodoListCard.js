@@ -1,8 +1,8 @@
-import { SaveIcon, TrashIcon } from "@heroicons/react/outline";
-import { useEffect, useState } from "react";
+import { TrashIcon } from "@heroicons/react/outline";
+import { useState } from "react";
 import ReactTooltip from "react-tooltip";
 
-import { deleteTodoList, fetchTodos, updateTodoList } from "../utils/apiCalls";
+import { deleteTodos, fetchTodos, updateTodos } from "../utils/apiCalls";
 import { EditBox } from "./EditBox";
 
 export const TodoListCard = ({ todoList, setSavedTodoLists }) => {
@@ -55,7 +55,7 @@ export const TodoListCard = ({ todoList, setSavedTodoLists }) => {
                       dateLastEdited: new Date(),
                     };
 
-                    await updateTodoList(todoList._id, payload);
+                    await updateTodos(todoList._id, payload, "lists");
                     setSavingStatus({
                       date: new Date(),
                       message: "Last edited at:",
@@ -91,8 +91,8 @@ export const TodoListCard = ({ todoList, setSavedTodoLists }) => {
             data-place="bottom"
             data-effect="solid"
             onClick={async () => {
-              await deleteTodoList(todoList._id);
-              fetchTodos().then(setSavedTodoLists);
+              await deleteTodos(todoList._id, "lists");
+              fetchTodos("lists").then(setSavedTodoLists);
             }}
             className="flex items-center justify-center w-12 h-12 rounded-full hover:shadow hover:bg-gray-100"
           >
