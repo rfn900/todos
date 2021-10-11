@@ -5,7 +5,6 @@ const TodoLists = require("../models/todoLists");
 /* GET home page. */
 router.get("/", async function (req, res, next) {
   const todoLists = await TodoLists.find({ userId: req.user._id });
-  console.log(req.user);
   res.statusCode = 200;
   res.json(todoLists);
 });
@@ -54,7 +53,7 @@ router.put("/:id", async function (req, res, next) {
 router.delete("/:id", async function (req, res, next) {
   const { id } = req.params;
   try {
-    const todoList = await TodoLists.findOneAndDelete({ _id: id });
+    await TodoLists.findOneAndDelete({ _id: id });
     res.status(200);
     res.json({
       _id: id,

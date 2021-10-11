@@ -3,10 +3,8 @@ const auth = (req, res, next) => {
     next();
   } else {
     res.statusCode = 403;
-    res.json({
-      status: "error",
-      message: "You need to be logged in to view this resource",
-    });
+    res.statusMessage = "You need to be logged in to see this resource";
+    res.redirect("http://localhost:3000/login");
   }
 };
 
