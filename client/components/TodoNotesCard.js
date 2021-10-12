@@ -1,4 +1,4 @@
-import { SaveIcon, TrashIcon } from "@heroicons/react/outline";
+import { PencilAltIcon, SaveIcon, TrashIcon } from "@heroicons/react/outline";
 import { useState, useRef } from "react";
 import ReactTooltip from "react-tooltip";
 import { MDEditor } from "./Markdown";
@@ -7,6 +7,7 @@ import remarkGfm from "remark-gfm";
 
 import { deleteTodos, updateTodos, fetchTodos } from "../utils/apiCalls";
 import { EditBox } from "./EditBox";
+import { ButtonMain } from "./ButtonMain";
 
 export const TodoNotesCard = ({ todoNotes, setSavedTodoNotes }) => {
   const [todosToUpdate, setTodosToUpdate] = useState(todoNotes.notes);
@@ -19,16 +20,21 @@ export const TodoNotesCard = ({ todoNotes, setSavedTodoNotes }) => {
   const editBoxRef = useRef();
   return (
     <>
-      <div className="group  bg-gray-50 rounded-xl w-[500px] px-8 pt-6 pb-4 shadow-md transition duration-300 hover:shadow-xl flex flex-col">
-        <div
-          onClick={() => setEditMode(!editMode)}
-          className="w-full pb-8 wmde-markdown wmde-markdown-color"
-        >
+      <div className="relative group bg-gray-50 rounded-xl w-[500px] pt-6 pb-4 shadow-md transition duration-300 hover:shadow-xl flex flex-col">
+        <div className="absolute right-0 top-3">
+          <ButtonMain
+            toolTipText="Edit Notes"
+            disable={false}
+            eventHandler={() => setEditMode(!editMode)}
+            Icon={PencilAltIcon}
+          />
+        </div>
+        <div className="w-full pb-8 px-8 wmde-markdown wmde-markdown-color">
           <ReactMarkdown children={todosToUpdate} remarkPlugins={[remarkGfm]} />
         </div>
-        <div className="w-full h-10 px-2 mt-auto bg-gray-50">
+        <div className="w-full h-10 mt-auto bg-gray-50">
           <div className="flex items-center justify-between w-full h-full opacity-0 transition duration-300 group-hover:opacity-100">
-            <div className="block font-mono text-gray-500">
+            <div className="block pl-8 font-mono text-gray-500">
               <p className="text-sm">{savingStatus.message}</p>
               <p className="text-xs">
                 {savingStatus.date &&
@@ -36,19 +42,15 @@ export const TodoNotesCard = ({ todoNotes, setSavedTodoNotes }) => {
               </p>
             </div>
             <ReactTooltip />
-            <button
-              data-tip="Delete Notes"
-              data-type="dark"
-              data-place="bottom"
-              data-effect="solid"
-              onClick={async () => {
+            <ButtonMain
+              toolTipText="Delete Notes"
+              disable={false}
+              eventHandler={async () => {
                 await deleteTodos(todoNotes._id, "notes");
                 fetchTodos("notes").then(setSavedTodoNotes);
               }}
-              className="flex items-center justify-center w-12 h-12 rounded-full hover:shadow hover:bg-gray-100"
-            >
-              <TrashIcon className="h-5 text-gray-500" />
-            </button>
+              Icon={TrashIcon}
+            />
           </div>
         </div>
       </div>
@@ -93,11 +95,19 @@ export const TodoNotesCard = ({ todoNotes, setSavedTodoNotes }) => {
               data-effect="solid"
               data-class="text-sm"
               onClick={async () => {
+                setSavingStatus({
+                  date: null,
+                  message: "Saving...",
+                });
                 const payload = {
                   notes: todosToUpdate,
                   dateLastEdited: new Date(),
                 };
                 await updateTodos(todoNotes._id, payload, "notes");
+                setSavingStatus({
+                  date: new Date(),
+                  message: "Last edited at:",
+                });
                 setEditMode(false);
               }}
               className="h-10 hover:bg-yellow-400 hover:bg-opacity-50 cursor-pointer transition rounded-full p-2 text-gray-500"

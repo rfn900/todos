@@ -21,7 +21,7 @@ import { TextInput } from "./TextInput";
 import { DeleteIcon } from "./DeleteIcon";
 import { Checkbox } from "./Checkbox";
 import { FormAddTodoList } from "./FormAddTodoList";
-import { ButtonMainForm } from "./ButtonMainForm";
+import { ButtonMain } from "./ButtonMain";
 
 export const TodoListsView = () => {
   const [listsOrNotesView, setListsOrNotesView] = useState("notes");
@@ -102,7 +102,7 @@ export const TodoListsView = () => {
               <MDEditor value={todoMDText} onChange={setTodoMDText} />
             </div>
             <div className="flex items-center justify-between w-full px-4 py-4">
-              <ButtonMainForm
+              <ButtonMain
                 toolTipText="Clear Note"
                 disable={false}
                 eventHandler={async () => {
@@ -112,7 +112,7 @@ export const TodoListsView = () => {
                 }}
                 Icon={XCircleIcon}
               />
-              <ButtonMainForm
+              <ButtonMain
                 toolTipText="Add Note to View"
                 disable={false}
                 eventHandler={async () => {
@@ -210,7 +210,7 @@ export const TodoListsView = () => {
               );
             })}
             <div className="flex items-center justify-between w-full px-4 py-4">
-              <ButtonMainForm
+              <ButtonMain
                 toolTipText="Add New List Item"
                 disable={false}
                 eventHandler={() => {
@@ -224,7 +224,7 @@ export const TodoListsView = () => {
                 }}
                 Icon={PlusCircleIcon}
               />
-              <ButtonMainForm
+              <ButtonMain
                 toolTipText="Add List to View"
                 disable={false}
                 eventHandler={() => {

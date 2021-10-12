@@ -1,5 +1,5 @@
 import { DocumentTextIcon, DocumentAddIcon } from "@heroicons/react/outline";
-import { ButtonMainForm } from "./ButtonMainForm";
+import { ButtonMain } from "./ButtonMain";
 export const FormAddTodoList = ({
   handleListClick,
   listInputRef,
@@ -17,14 +17,14 @@ export const FormAddTodoList = ({
           name="todo_add"
           placeholder="Todo List Title..."
         />
-        <ButtonMainForm
+        <ButtonMain
           toolTipText="Add Todo Note"
           eventHandler={handleNotesClick}
           disable={disable}
           Icon={DocumentTextIcon}
         />
 
-        <ButtonMainForm
+        <ButtonMain
           toolTipText="Add Todo List Item"
           eventHandler={handleListClick}
           disable={disable}

@@ -1,10 +1,5 @@
 import ReactTooltip from "react-tooltip";
-export const ButtonMainForm = ({
-  toolTipText,
-  disable,
-  eventHandler,
-  Icon,
-}) => {
+export const ButtonMain = ({ toolTipText, disable, eventHandler, Icon }) => {
   return (
     <>
       <ReactTooltip />
