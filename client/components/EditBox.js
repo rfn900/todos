@@ -1,7 +1,7 @@
 import { useRef, useMemo, useState } from "react";
 import { debounce } from "lodash";
 import { PlusIcon, XIcon } from "@heroicons/react/outline";
-import { updateTodoList } from "../utils/apiCalls";
+import { updateTodos } from "../utils/apiCalls";
 export const EditBox = ({
   todosToUpdate,
   setTodosToUpdate,
@@ -17,7 +17,7 @@ export const EditBox = ({
   const DEBOUNCED_TIME = 1500; // Em ms
 
   const handleChange = async (payload) => {
-    await updateTodoList(listId, payload);
+    await updateTodos(listId, payload, "lists");
   };
 
   const debouncedHandleChange = useMemo(
@@ -94,7 +94,7 @@ export const EditBox = ({
                         dateLastEdited: new Date(),
                       };
 
-                      await updateTodoList(listId, payload);
+                      await updateTodos(listId, payload, "lists");
                       setSavingStatus({
                         date: new Date(),
                         message: "Last Edited at:",

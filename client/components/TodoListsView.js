@@ -14,6 +14,7 @@ import {
   deleteTodos,
 } from "../utils/apiCalls";
 import { SavedTodoLists } from "./SavedTodoLists";
+import { SavedTodoNotes } from "./SavedTodoNotes";
 import { MDEditor } from "./Markdown";
 import { useUser } from "../context/user";
 import { TextInput } from "./TextInput";
@@ -21,7 +22,9 @@ import { DeleteIcon } from "./DeleteIcon";
 import { Checkbox } from "./Checkbox";
 import { FormAddTodoList } from "./FormAddTodoList";
 import { ButtonMainForm } from "./ButtonMainForm";
+
 export const TodoListsView = () => {
+  const [listsOrNotesView, setListsOrNotesView] = useState("notes");
   const [todos, setTodos] = useState(null);
   const [todoMDText, setTodoMDText] = useState(null);
   const [savedTodoLists, setSavedTodoLists] = useState(null);
@@ -112,13 +115,15 @@ export const TodoListsView = () => {
               <ButtonMainForm
                 toolTipText="Add Note to View"
                 disable={false}
-                eventHandler={() => {
+                eventHandler={async () => {
                   const payload = {
                     notes: todoMDText,
                     dateLastEdited: new Date(),
                   };
-                  console.log(payload);
-                  debouncedHandleChange(payload);
+                  await updateTodos(activeList, payload, "notes");
+                  listInputRef.current.value = "";
+                  setTodoMDText(null);
+                  fetchTodos("notes").then(setSavedTodoNotes);
                 }}
                 Icon={ViewGridAddIcon}
               />
@@ -234,10 +239,41 @@ export const TodoListsView = () => {
           </>
         )}
       </div>
-      <SavedTodoLists
-        savedTodoLists={savedTodoLists}
-        setSavedTodoLists={setSavedTodoLists}
-      />
+      <div className="flex mt-12 ">
+        <button
+          onClick={() => setListsOrNotesView("notes")}
+          className={`${
+            listsOrNotesView === "notes"
+              ? "bg-yellow-200 Wext-gray-800 shadow-md"
+              : "bg-gray-100 shadow text-gray-400"
+          } px-4 rounded-l-full py-2 transition`}
+        >
+          Todo Notes
+        </button>
+        <button
+          onClick={() => setListsOrNotesView("lists")}
+          className={`${
+            listsOrNotesView === "lists"
+              ? "bg-yellow-200 text-gray-800 shadow-md"
+              : "bg-gray-100 shadow text-gray-400"
+          } px-4 rounded-r-full py-2 transition`}
+        >
+          Todo Lists
+        </button>
+      </div>
+
+      {listsOrNotesView === "lists" && (
+        <SavedTodoLists
+          savedTodoLists={savedTodoLists}
+          setSavedTodoLists={setSavedTodoLists}
+        />
+      )}
+      {listsOrNotesView === "notes" && (
+        <SavedTodoNotes
+          savedTodoNotes={savedTodoNotes}
+          setSavedTodoNotes={setSavedTodoNotes}
+        />
+      )}
     </div>
   );
 };
