@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { TodoListCard } from "./TodoListCard";
 import { Loading } from "./Loading";
 
