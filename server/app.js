@@ -40,7 +40,7 @@ app.use(
 // Passport
 app.use(passport.initialize());
 app.use(passport.session());
-//app.use("/api/v1", auth);
+app.use("/api/v1", auth);
 
 mongoose
   .connect(process.env.DATABASE, {
