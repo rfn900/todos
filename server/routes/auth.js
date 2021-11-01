@@ -15,7 +15,7 @@ router.get(
   passport.authenticate("google", { failureRedirect: "/users/login" }),
   function (req, res) {
     console.log(req.session);
-    res.json("I should be logged in");
+    res.json({ session: req.session });
   }
 );
 
