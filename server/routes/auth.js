@@ -4,7 +4,7 @@ const passport = require("passport");
 require("../auth");
 
 const intercept = (req, res, next) => {
-  req.statusCode(200);
+  req.statusCode = 200;
   next();
 };
 router.get(
