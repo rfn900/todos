@@ -13,7 +13,7 @@ const generateToken = (userId) =>
 
 const createAndSendToken = (user, statusCode, req, res) => {
   const token = generateToken(user._id);
-
+  console.log(token);
   res.status(statusCode).json({
     status: "success",
     token,
