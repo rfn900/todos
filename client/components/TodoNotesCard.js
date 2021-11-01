@@ -6,7 +6,6 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 import { deleteTodos, updateTodos, fetchTodos } from "../utils/apiCalls";
-import { EditBox } from "./EditBox";
 import { ButtonMain } from "./ButtonMain";
 
 export const TodoNotesCard = ({ todoNotes, setSavedTodoNotes }) => {
@@ -108,6 +107,7 @@ export const TodoNotesCard = ({ todoNotes, setSavedTodoNotes }) => {
                   date: new Date(),
                   message: "Last edited at:",
                 });
+                fetchTodos("notes").then(setSavedTodoNotes);
                 setEditMode(false);
               }}
               className="h-10 hover:bg-yellow-400 hover:bg-opacity-50 cursor-pointer transition rounded-full p-2 text-gray-500"

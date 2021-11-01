@@ -60,6 +60,7 @@ export const TodoListCard = ({ todoList, setSavedTodoLists }) => {
                       date: new Date(),
                       message: "Last edited at:",
                     });
+                    fetchTodos("lists").then(setSavedTodoLists);
                   }}
                 />
                 <span

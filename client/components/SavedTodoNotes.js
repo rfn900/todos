@@ -1,6 +1,4 @@
 import { Loading } from "./Loading";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
 import Masonry from "react-masonry-css";
 
 import { TodoNotesCard } from "./TodoNotesCard";
