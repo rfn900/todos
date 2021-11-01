@@ -1,6 +1,6 @@
 export const LoginForm = () => {
   const googleClick = () => {
-    window.location = "http://localhost:5000/auth/google";
+    window.location = "https://rod-todos.herokuapp.com/auth/google";
   };
   return (
     <div className="flex flex-col w-full h-screen space-y-8 bg-gray-50 justify-center items-center">
