@@ -13,7 +13,7 @@
 # next.js
 /client/.next/
 /client/out/
-
+/client/.env.local
 # production
 /client/build
 
