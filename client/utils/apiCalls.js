@@ -3,22 +3,30 @@ import axios from "axios";
 // type => list or notes
 
 export const fetchTodos = (type, item = "") => {
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
   return axios
-    .get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/todos/${type}/${item}`, {
-      withCredentials: true,
-    })
+    .get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/todos/${type}/${item}`, config)
     .then((res) => res.data)
     .then((data) => Promise.resolve(data));
 };
 
 export const postTodos = async (payload, type) => {
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
   try {
     const res = await axios.post(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/todos/${type}`,
       payload,
-      {
-        withCredentials: true,
-      }
+      config
     );
     return res.data;
   } catch (e) {
@@ -27,11 +35,17 @@ export const postTodos = async (payload, type) => {
 };
 
 export const updateTodos = async (id, payload, type) => {
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
   try {
     const res = await axios.put(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/todos/${type}/${id}`,
       payload,
-      { withCredentials: true }
+      config
     );
     return res.data;
   } catch (e) {
@@ -40,12 +54,16 @@ export const updateTodos = async (id, payload, type) => {
 };
 
 export const deleteTodos = async (id, type) => {
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
   try {
     const res = await axios.delete(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/todos/${type}/${id}`,
-      {
-        withCredentials: true,
-      }
+      config
     );
     return res.data;
   } catch (e) {
@@ -54,12 +72,16 @@ export const deleteTodos = async (id, type) => {
 };
 
 export const fetchLoggedUser = async () => {
+  const token = localStorage.getItem("token");
+  let config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
   try {
     const res = await axios.get(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/users`,
-      {
-        withCredentials: true,
-      }
+      config
     );
     return res.data;
   } catch (e) {
