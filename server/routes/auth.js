@@ -3,13 +3,8 @@ const router = express.Router();
 const passport = require("passport");
 require("../auth");
 
-const intercept = (req, res, next) => {
-  req.statusCode = 200;
-  next();
-};
 router.get(
   "/google",
-  intercept,
   passport.authenticate("google", {
     scope: ["profile", "email"],
   })
@@ -19,8 +14,7 @@ router.get(
   "/google/callback",
   passport.authenticate("google", { failureRedirect: "/users/login" }),
   function (req, res) {
-    console.log(req.session);
-    res.json({ session: req.session });
+    res.redirect("http://localhost:3000");
   }
 );
 
