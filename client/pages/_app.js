@@ -1,12 +1,13 @@
 import "../styles/globals.css";
 import { UserContext } from "../context/user";
 import { useState, useEffect } from "react";
-import { fetchLoggedUser, isLoggedIn } from "../utils/apiCalls";
+import { fetchLoggedUser } from "../utils/apiCalls";
 import { useRouter } from "next/dist/client/router";
 
 function MyApp({ Component, pageProps }) {
   const [user, setUser] = useState(null);
   const router = useRouter();
+  console.log(router);
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (router.pathname === "/login" && token) router.push("/");

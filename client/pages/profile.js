@@ -1,12 +1,33 @@
+import { useState } from "react";
 import { Nav } from "../components/Nav";
 import { useUser } from "../context/user";
+import { deleteMe } from "../utils/apiCalls";
 
 export default function Home() {
-  const user = useUser();
+  const { user } = useUser();
+  const [userDeleted, setUserDeleted] = useState(false);
+
+  const handleDelete = () => {
+    deleteMe().then((isDeleted) => {
+      if (isDeleted) {
+        localStorage.removeItem("token");
+        setUserDeleted(true);
+      }
+    });
+  };
+
+  if (userDeleted)
+    return (
+      <div className="flex gap-4 flex-col items-center justify-center max-w-8xl mx-auto min-h-screen py-2">
+        <h2 className="text-3xl">This user has been deleted</h2>
+        <h3 className="text-2xl">Sad to see you go 😥 </h3>
+      </div>
+    );
+
   return (
     <div className="flex flex-col max-w-8xl mx-auto min-h-screen py-2">
       <Nav />
-      <div className="flex w-[480px] rounded h-[400px] shadow m-auto border-px items-center gap-8 justify-center">
+      <div className="relative flex w-[480px] rounded h-[400px] shadow m-auto border-px items-center gap-8 justify-center">
         <img
           src={user.imageUrl}
           className="rounded-full shadow-lg"
@@ -25,7 +46,12 @@ export default function Home() {
             <span className="font-bold">Registered at: </span>
             {new Date(user.registerDate).toLocaleString()}
           </p>
-          <p></p>
+          <button
+            className="absolute bottom-12 right-12 text-red-500"
+            onClick={() => handleDelete()}
+          >
+            delete user
+          </button>
         </div>
       </div>
     </div>

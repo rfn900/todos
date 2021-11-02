@@ -3,6 +3,9 @@ const router = express.Router();
 const { OAuth2Client } = require("google-auth-library");
 const jwt = require("jsonwebtoken");
 const User = require("../models/users");
+const TodoLists = require("../models/todoLists");
+const TodoNotes = require("../models/todoNotes");
+const guard = require("../middlewares/guard");
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
@@ -53,6 +56,15 @@ router.post("/google", async (req, res, next) => {
     }
   }
   console.log(response.payload);
+});
+
+router.delete("/deleteMe", guard, async (req, res, next) => {
+  const userId = req.user._id;
+  await User.findOneAndDelete({ _id: userId });
+  await TodoLists.deleteMany({ userId: userId });
+  await TodoNotes.deleteMany({ userId: userId });
+
+  res.status(203).json({ success: true });
 });
 
 module.exports = router;

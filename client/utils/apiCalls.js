@@ -81,11 +81,22 @@ export const fetchLoggedUser = async () => {
   }
 };
 
-export const isLoggedIn = async () => {
-  const res = await axios.get(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/check`
-  );
-  return res.data.isAuthenticated;
+export const deleteMe = async () => {
+  const token = localStorage.getItem("token");
+  let config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  try {
+    const res = await axios.delete(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/deleteMe`,
+      config
+    );
+    return res.data.success;
+  } catch (e) {
+    console.error(e);
+  }
 };
 
 export const googleLogin = async (payload) => {
