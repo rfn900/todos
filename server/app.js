@@ -11,10 +11,11 @@ const mongoose = require("mongoose");
 const guard = require("./middlewares/guard");
 const app = express();
 
+dotenv.config();
 app.use(logger("dev"));
 app.use(
   cors({
-    origin: ["http://localhost:3000", "http://127.0.0.1:3000"], // allow to server to accept request from different origin
+    origin: [`${process.env.CLIENT_URL}`], // allow to server to accept request from different origin
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true, // allow session cookie from browser to pass through
   })
@@ -22,7 +23,6 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-dotenv.config();
 
 //This middleware will protect all api private routes
 app.use("/api/v1", guard);
