@@ -97,6 +97,9 @@ export const isLoggedIn = async () => {
 };
 
 export const googleLogin = async (payload) => {
-  const res = await axios.post("http://localhost:5000/auth/google", payload);
+  const res = await axios.post(
+    "https://rod-todos.herokuapp.com/auth/google",
+    payload
+  );
   return res.data;
 };

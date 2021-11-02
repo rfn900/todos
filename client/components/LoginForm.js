@@ -1,13 +1,11 @@
-import { useRouter } from "next/router";
 import { GoogleLogin } from "react-google-login";
 import { googleLogin } from "../utils/apiCalls";
 export const LoginForm = () => {
-  const router = useRouter();
   const resSuccessGoogle = async (response) => {
     console.log(response.tokenId);
     const data = await googleLogin({ tokenId: response.tokenId });
     localStorage.setItem("token", data.token);
-    router.push("/");
+    window.location.href = "http://localhost:3000";
   };
 
   const resErrorGoogle = (response) => {
