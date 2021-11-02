@@ -4,7 +4,7 @@ export const LoginForm = () => {
   const resSuccessGoogle = async (response) => {
     const data = await googleLogin({ tokenId: response.tokenId });
     localStorage.setItem("token", data.token);
-    window.location.href = "http://localhost:3000";
+    window.location.href = "/";
   };
 
   const resErrorGoogle = (response) => {
