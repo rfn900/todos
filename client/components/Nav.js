@@ -37,7 +37,9 @@ export const Nav = () => {
             <a href="/profile">Profile</a>
           </div>
           <div>
-            <a onClick={handleLogout}>Logout</a>
+            <a className="cursor-pointer" onClick={handleLogout}>
+              Logout
+            </a>
           </div>
         </div>
       </div>

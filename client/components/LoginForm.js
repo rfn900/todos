@@ -2,7 +2,6 @@ import { GoogleLogin } from "react-google-login";
 import { googleLogin } from "../utils/apiCalls";
 export const LoginForm = () => {
   const resSuccessGoogle = async (response) => {
-    console.log(response.tokenId);
     const data = await googleLogin({ tokenId: response.tokenId });
     localStorage.setItem("token", data.token);
     window.location.href = "http://localhost:3000";

@@ -1,8 +1,9 @@
 import "../styles/globals.css";
 import { UserContext } from "../context/user";
 import { useState, useEffect } from "react";
-import { fetchLoggedUser, isLoggedIn } from "../utils/apiCalls";
+import { fetchLoggedUser } from "../utils/apiCalls";
 import { useRouter } from "next/dist/client/router";
+import { Loading } from "../components/Loading";
 
 function MyApp({ Component, pageProps }) {
   const [user, setUser] = useState(null);
@@ -18,7 +19,11 @@ function MyApp({ Component, pageProps }) {
   }, []);
 
   if (pageProps.protected && !user) {
-    return <h1>Loading...</h1>;
+    return (
+      <div className="flex items-center justify-center min-h-screen w-screen">
+        <Loading />
+      </div>
+    );
   }
   return (
     <UserContext.Provider value={{ user, setUser }}>
