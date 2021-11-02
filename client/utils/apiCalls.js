@@ -1,7 +1,8 @@
 import axios from "axios";
 
 // type => list or notes
-
+const apiUrl =
+  process.env.NEXT_PUBLIC_BACKEND_URL + process.env.NEXT_PUBLIC_API_ROUTE;
 export const fetchTodos = (type, item = "") => {
   const token = localStorage.getItem("token");
   const config = {
@@ -10,7 +11,7 @@ export const fetchTodos = (type, item = "") => {
     },
   };
   return axios
-    .get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/todos/${type}/${item}`, config)
+    .get(`${apiUrl}/todos/${type}/${item}`, config)
     .then((res) => res.data)
     .then((data) => Promise.resolve(data));
 };
@@ -23,11 +24,8 @@ export const postTodos = async (payload, type) => {
     },
   };
   try {
-    const res = await axios.post(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/todos/${type}`,
-      payload,
-      config
-    );
+    const res = await axios.post(`${apiUrl}/todos/${type}`, payload, config);
+    console.log(res.data);
     return res.data;
   } catch (e) {
     /* handle error */
@@ -43,7 +41,7 @@ export const updateTodos = async (id, payload, type) => {
   };
   try {
     const res = await axios.put(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/todos/${type}/${id}`,
+      `${apiUrl}/todos/${type}/${id}`,
       payload,
       config
     );
@@ -61,10 +59,7 @@ export const deleteTodos = async (id, type) => {
     },
   };
   try {
-    const res = await axios.delete(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/todos/${type}/${id}`,
-      config
-    );
+    const res = await axios.delete(`${apiUrl}/todos/${type}/${id}`, config);
     return res.data;
   } catch (e) {
     /* handle error */
@@ -79,10 +74,7 @@ export const fetchLoggedUser = async () => {
     },
   };
   try {
-    const res = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/users`,
-      config
-    );
+    const res = await axios.get(`${apiUrl}/users`, config);
     return res.data;
   } catch (e) {
     /* handle error */
@@ -90,15 +82,15 @@ export const fetchLoggedUser = async () => {
 };
 
 export const isLoggedIn = async () => {
-  const res = await axios.get("http://localhost:5000/auth/check", {
-    withCredentials: true,
-  });
+  const res = await axios.get(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/check`
+  );
   return res.data.isAuthenticated;
 };
 
 export const googleLogin = async (payload) => {
   const res = await axios.post(
-    "https://rod-todos.herokuapp.com/auth/google",
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/google`,
     payload
   );
   return res.data;
