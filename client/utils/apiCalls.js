@@ -25,7 +25,6 @@ export const postTodos = async (payload, type) => {
   };
   try {
     const res = await axios.post(`${apiUrl}/todos/${type}`, payload, config);
-    console.log(res.data);
     return res.data;
   } catch (e) {
     /* handle error */

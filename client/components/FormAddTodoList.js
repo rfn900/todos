@@ -1,9 +1,10 @@
 import { DocumentTextIcon, DocumentAddIcon } from "@heroicons/react/outline";
 import { ButtonMain } from "./ButtonMain";
 export const FormAddTodoList = ({
+  isFormActive,
+  setIsFormActive,
   handleListClick,
   listInputRef,
-  disable,
   handleNotesClick,
 }) => {
   return (
@@ -16,18 +17,23 @@ export const FormAddTodoList = ({
           type="text"
           name="todo_add"
           placeholder="Todo List Title..."
+          onChange={() => {
+            listInputRef.current.value === ""
+              ? setIsFormActive(false)
+              : setIsFormActive(true);
+          }}
         />
         <ButtonMain
           toolTipText="Add Todo Note"
           eventHandler={handleNotesClick}
-          disable={disable}
+          disable={!isFormActive}
           Icon={DocumentTextIcon}
         />
 
         <ButtonMain
           toolTipText="Add Todo List Item"
           eventHandler={handleListClick}
-          disable={disable}
+          disable={!isFormActive}
           Icon={DocumentAddIcon}
         />
       </div>

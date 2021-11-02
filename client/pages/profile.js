@@ -8,12 +8,14 @@ export default function Home() {
   const [userDeleted, setUserDeleted] = useState(false);
 
   const handleDelete = () => {
-    deleteMe().then((isDeleted) => {
-      if (isDeleted) {
-        localStorage.removeItem("token");
-        setUserDeleted(true);
-      }
-    });
+    if (window.confirm("Are you sure about this? This can't be undone?")) {
+      deleteMe().then((isDeleted) => {
+        if (isDeleted) {
+          localStorage.removeItem("token");
+          setUserDeleted(true);
+        }
+      });
+    }
   };
 
   if (userDeleted)
@@ -27,7 +29,7 @@ export default function Home() {
   return (
     <div className="flex flex-col max-w-8xl mx-auto min-h-screen py-2">
       <Nav />
-      <div className="relative flex w-[480px] rounded h-[400px] shadow m-auto border-px items-center gap-8 justify-center">
+      <div className="relative flex w-[480px] rounded h-[400px] shadow m-auto transition hover:shadow-lg border-px items-center gap-8 justify-center">
         <img
           src={user.imageUrl}
           className="rounded-full shadow-lg"

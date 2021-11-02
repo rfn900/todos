@@ -29,6 +29,7 @@ export const TodoListsView = () => {
   const [todoMDText, setTodoMDText] = useState(null);
   const [savedTodoLists, setSavedTodoLists] = useState(null);
   const [savedTodoNotes, setSavedTodoNotes] = useState(null);
+  const [isFormActive, setIsFormActive] = useState(false);
   const [activeList, setActiveList] = useState(null);
   const { user } = useUser();
 
@@ -48,7 +49,7 @@ export const TodoListsView = () => {
       todos: newTodoListContent,
       dateLastEdited: new Date(),
     };
-    console.log(payload);
+    setIsFormActive(false);
     const { _id } = await postTodos(payload, "lists");
     setActiveList(_id);
     setListsOrNotesView("lists");
@@ -57,6 +58,7 @@ export const TodoListsView = () => {
   const handleNotesClick = async (e) => {
     e.preventDefault();
     setTodos(null);
+    setIsFormActive(false);
     const title = listInputRef.current.value;
     setTodoMDText(`# ${title}`);
     const payload = {
@@ -92,7 +94,8 @@ export const TodoListsView = () => {
     <div className="flex flex-col pb-8 items-center justify-center w-full px-8 mt-12 sm:px-0">
       <div className="w-full border-2 border-gray-300 shadow-md sm:w-1/2 rounded-xl">
         <FormAddTodoList
-          disable={todos || todoMDText ? true : false}
+          isFormActive={isFormActive}
+          setIsFormActive={setIsFormActive}
           handleListClick={handleListClick}
           listInputRef={listInputRef}
           handleNotesClick={handleNotesClick}
@@ -123,6 +126,7 @@ export const TodoListsView = () => {
                   };
                   await updateTodos(activeList, payload, "notes");
                   listInputRef.current.value = "";
+                  setIsFormActive(false);
                   setTodoMDText(null);
                   fetchTodos("notes").then(setSavedTodoNotes);
                 }}
@@ -232,6 +236,7 @@ export const TodoListsView = () => {
                   fetchTodos("lists").then(setSavedTodoLists);
                   setTodos(null);
                   listInputRef.current.value = "";
+                  setIsFormActive(false);
                 }}
                 Icon={ViewGridAddIcon}
               />

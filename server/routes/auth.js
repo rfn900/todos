@@ -16,7 +16,6 @@ const generateToken = (userId) =>
 
 const createAndSendToken = (user, statusCode, req, res) => {
   const token = generateToken(user._id);
-  console.log(token);
   res.status(statusCode).json({
     status: "success",
     token,
@@ -55,7 +54,6 @@ router.post("/google", async (req, res, next) => {
       });
     }
   }
-  console.log(response.payload);
 });
 
 router.delete("/deleteMe", guard, async (req, res, next) => {

@@ -3,11 +3,11 @@ import { UserContext } from "../context/user";
 import { useState, useEffect } from "react";
 import { fetchLoggedUser } from "../utils/apiCalls";
 import { useRouter } from "next/dist/client/router";
+import { Loading } from "../components/Loading";
 
 function MyApp({ Component, pageProps }) {
   const [user, setUser] = useState(null);
   const router = useRouter();
-  console.log(router);
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (router.pathname === "/login" && token) router.push("/");
@@ -19,7 +19,11 @@ function MyApp({ Component, pageProps }) {
   }, []);
 
   if (pageProps.protected && !user) {
-    return <h1>Loading...</h1>;
+    return (
+      <div className="flex items-center justify-center min-h-screen w-screen">
+        <Loading />
+      </div>
+    );
   }
   return (
     <UserContext.Provider value={{ user, setUser }}>
