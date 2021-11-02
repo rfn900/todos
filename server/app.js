@@ -1,16 +1,14 @@
 const express = require("express");
-const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const cors = require("cors");
 const dotenv = require("dotenv");
+const cookieParser = require("cookie-parser");
 const todosRouter = require("./routes/todos");
 const notesRouter = require("./routes/notes");
 const usersRouter = require("./routes/users");
 const authRouter = require("./routes/auth");
 const mongoose = require("mongoose");
-const passport = require("passport");
-const session = require("express-session");
-const auth = require("./middlewares/auth");
+const guard = require("./middlewares/guard");
 const app = express();
 
 app.use(logger("dev"));
@@ -24,23 +22,10 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-
 dotenv.config();
 
-app.use(
-  session({
-    secret: "wet cat",
-    resave: true,
-    saveUninitialized: true,
-    cookie: {
-      maxAge: 3600000,
-    },
-  })
-);
-// Passport
-app.use(passport.initialize());
-app.use(passport.session());
-app.use("/api/v1", auth);
+//This middleware will protect all api private routes
+app.use("/api/v1", guard);
 
 mongoose
   .connect(process.env.DATABASE, {

@@ -7,20 +7,21 @@ import { useRouter } from "next/dist/client/router";
 function MyApp({ Component, pageProps }) {
   const [user, setUser] = useState(null);
   const router = useRouter();
-  if (router.pathname === "/login" && user) router.push("/");
   useEffect(() => {
-    (async () => {
-      const fetchedUser = await fetchLoggedUser();
-      if (!fetchedUser) router.push("/login");
-      setUser(fetchedUser);
-    })();
+    const token = localStorage.getItem("token");
+    if (router.pathname === "/login" && token) router.push("/");
+    if (token) {
+      fetchLoggedUser().then(setUser);
+    } else {
+      router.push("/login");
+    }
   }, []);
 
   if (pageProps.protected && !user) {
     return <h1>Loading...</h1>;
   }
   return (
-    <UserContext.Provider value={user}>
+    <UserContext.Provider value={{ user, setUser }}>
       <Component {...pageProps} />
     </UserContext.Provider>
   );

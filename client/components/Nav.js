@@ -1,10 +1,15 @@
+import { useRouter } from "next/router";
 import { DocumentTextIcon, ChevronDownIcon } from "@heroicons/react/outline";
-import { useState } from "react";
-
-import { useUser } from "../context/user";
+import { useContext, useState } from "react";
+import { UserContext } from "../context/user";
 export const Nav = () => {
   const [showDropdown, setShowDropDown] = useState(false);
-  const user = useUser();
+  const { user, setUser } = useContext(UserContext);
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setUser(null);
+    window.location.href = "/login";
+  };
   return (
     <nav className="flex px-8 items-center justify-between border-b-2 py-2">
       <div className="flex items-center justify-around gap-4">
@@ -32,7 +37,7 @@ export const Nav = () => {
             <a href="/profile">Profile</a>
           </div>
           <div>
-            <a href="http://localhost:5000/auth/logout">Logout</a>
+            <a onClick={handleLogout}>Logout</a>
           </div>
         </div>
       </div>
