@@ -30,7 +30,7 @@ export const TodoListsView = () => {
   const [savedTodoLists, setSavedTodoLists] = useState(null);
   const [savedTodoNotes, setSavedTodoNotes] = useState(null);
   const [activeList, setActiveList] = useState(null);
-  const user = useUser();
+  const { user } = useUser();
 
   const handleListClick = async (e) => {
     e.preventDefault();
@@ -48,9 +48,10 @@ export const TodoListsView = () => {
       todos: newTodoListContent,
       dateLastEdited: new Date(),
     };
-
+    console.log(payload);
     const { _id } = await postTodos(payload, "lists");
     setActiveList(_id);
+    setListsOrNotesView("lists");
   };
 
   const handleNotesClick = async (e) => {
@@ -66,13 +67,13 @@ export const TodoListsView = () => {
 
     const { _id } = await postTodos(payload, "notes");
     setActiveList(_id);
+    setListsOrNotesView("notes");
   };
 
   // Autosaving with debounce every 350 ms
   const DEBOUNCED_TIME = 350;
   const handleChange = async (payload) => {
     const editType = todoMDText ? "notes" : "lists";
-    console.log(activeList, editType, payload);
     await updateTodos(activeList, payload, editType);
   };
   const debouncedHandleChange = useMemo(
@@ -211,7 +212,7 @@ export const TodoListsView = () => {
             })}
             <div className="flex items-center justify-between w-full px-4 py-4">
               <ButtonMain
-                toolTipText="Add New List Item"
+                toolTipText="Add New Todo List"
                 disable={false}
                 eventHandler={() => {
                   setTodos([
@@ -230,7 +231,6 @@ export const TodoListsView = () => {
                 eventHandler={() => {
                   fetchTodos("lists").then(setSavedTodoLists);
                   setTodos(null);
-                  console.log(todos);
                   listInputRef.current.value = "";
                 }}
                 Icon={ViewGridAddIcon}
