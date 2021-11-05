@@ -40,8 +40,12 @@ app.use("/api/v1/todos/notes", notesRouter);
 app.use("/api/v1/users", usersRouter);
 app.use("/auth", authRouter);
 
-app.get("/", function (req, res, next) {
-  res.send("ok");
+// Global error handler
+app.use((err, req, res, next) => {
+  res.status(err.statusCode).json({
+    status: err.status,
+    message: err.message,
+  });
 });
 
 module.exports = app;
