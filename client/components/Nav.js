@@ -1,10 +1,9 @@
-import { useRouter } from "next/router";
 import { DocumentTextIcon, ChevronDownIcon } from "@heroicons/react/outline";
-import { useContext, useState } from "react";
-import { UserContext } from "../context/user";
+import { useState } from "react";
+import { useUser } from "../context/user";
 export const Nav = () => {
   const [showDropdown, setShowDropDown] = useState(false);
-  const { user, setUser } = useContext(UserContext);
+  const { user, setUser } = useUser();
   const handleLogout = () => {
     localStorage.removeItem("token");
     setUser(null);
