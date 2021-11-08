@@ -1,4 +1,4 @@
-import { useRef, useMemo, useState } from "react";
+import { useRef, useMemo } from "react";
 import { debounce } from "lodash";
 import { PlusIcon, XIcon } from "@heroicons/react/outline";
 import { updateTodos } from "../utils/apiCalls";
@@ -74,7 +74,7 @@ export const EditBox = ({
                     className="w-4 h-4 text-yellow-600 bg-transparent border-gray-500 rounded cursor-pointer focus:ring-gray-500"
                     type="checkbox"
                     checked={todo.completed}
-                    onChange={async (e) => {
+                    onChange={async () => {
                       setSavingStatus({
                         date: null,
                         message: "Saving...",
@@ -137,7 +137,7 @@ export const EditBox = ({
                       }}
                     />
                     <XIcon
-                      onClick={(e) => {
+                      onClick={() => {
                         setSavingStatus({
                           date: null,
                           message: "Saving...",
@@ -170,7 +170,7 @@ export const EditBox = ({
           </div>
           <div className="w-full flex items-center justify-between">
             <PlusIcon
-              onClick={(e) =>
+              onClick={() =>
                 setTodosToUpdate([
                   ...todosToUpdate,
                   {

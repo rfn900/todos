@@ -13,7 +13,7 @@ export const LoginForm = () => {
   return (
     <div className="flex flex-col w-full h-screen space-y-8 bg-gray-50 justify-center items-center">
       <h2 className="text-3xl text-gray-600">
-        Don't have an account? Don't worry. Login with Google
+        No account? No Problem! Login with Google
       </h2>
       <GoogleLogin
         clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}
@@ -22,7 +22,6 @@ export const LoginForm = () => {
         onFailure={resErrorGoogle}
         cookiePolicy={"single_host_origin"}
       />
-      ,
     </div>
   );
 };

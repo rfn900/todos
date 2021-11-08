@@ -29,7 +29,9 @@ export const TodoNotesCard = ({ todoNotes, setSavedTodoNotes }) => {
           />
         </div>
         <div className="w-full pb-8 px-8 wmde-markdown wmde-markdown-color">
-          <ReactMarkdown children={todosToUpdate} remarkPlugins={[remarkGfm]} />
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>
+            {todosToUpdate}
+          </ReactMarkdown>
         </div>
         <div className="w-full h-10 mt-auto bg-gray-50">
           <div className="flex items-center justify-between w-full h-full opacity-0 transition duration-300 group-hover:opacity-100">

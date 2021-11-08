@@ -152,24 +152,22 @@ export const TodoListsView = () => {
                       <Checkbox
                         todo={todo}
                         onChange={() => {
-                          {
-                            const newTodos = [
-                              //immutable update
-                              ...todos.slice(0, index),
-                              {
-                                ...todos[index],
-                                completed: !todo.completed,
-                              },
-                              ...todos.slice(index + 1),
-                            ];
-                            setTodos(newTodos);
-                            const payload = {
-                              title: listInputRef.current.value,
-                              content: newTodos,
-                              dateLastEdited: new Date(),
-                            };
-                            debouncedHandleChange(payload);
-                          }
+                          const newTodos = [
+                            //immutable update
+                            ...todos.slice(0, index),
+                            {
+                              ...todos[index],
+                              completed: !todo.completed,
+                            },
+                            ...todos.slice(index + 1),
+                          ];
+                          setTodos(newTodos);
+                          const payload = {
+                            title: listInputRef.current.value,
+                            content: newTodos,
+                            dateLastEdited: new Date(),
+                          };
+                          debouncedHandleChange(payload);
                         }}
                       />
                     )}

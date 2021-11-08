@@ -60,7 +60,7 @@ export default function Home() {
   );
 }
 
-export async function getStaticProps(context) {
+export async function getStaticProps() {
   return {
     props: {
       protected: true,
