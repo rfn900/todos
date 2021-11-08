@@ -111,6 +111,7 @@ export const TodoListCard = ({ todoList, setSavedTodoLists }) => {
         setEditMode={setEditMode}
         savingStatus={savingStatus}
         setSavingStatus={setSavingStatus}
+        setSavedTodoLists={setSavedTodoLists}
       />
     </div>
   );

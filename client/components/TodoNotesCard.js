@@ -1,6 +1,5 @@
 import { PencilAltIcon, SaveIcon, TrashIcon } from "@heroicons/react/outline";
 import { useState, useRef } from "react";
-import ReactTooltip from "react-tooltip";
 import { MDEditor } from "./Markdown";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -42,7 +41,6 @@ export const TodoNotesCard = ({ todoNotes, setSavedTodoNotes }) => {
                   new Date(savingStatus.date).toLocaleString()}
               </p>
             </div>
-            <ReactTooltip />
             <ButtonMain
               toolTipText="Delete Notes"
               disable={false}
@@ -88,14 +86,11 @@ export const TodoNotesCard = ({ todoNotes, setSavedTodoNotes }) => {
                   new Date(savingStatus.date).toLocaleString()}
               </p>
             </div>
-            <ReactTooltip />
-            <SaveIcon
-              data-tip="Save & Exit"
-              data-type="dark"
+            <ButtonMain
+              toolTipText="Clear Note"
               data-place="left"
-              data-effect="solid"
-              data-class="text-sm"
-              onClick={async () => {
+              disable={false}
+              eventHandler={async () => {
                 setSavingStatus({
                   date: null,
                   message: "Saving...",
@@ -112,7 +107,7 @@ export const TodoNotesCard = ({ todoNotes, setSavedTodoNotes }) => {
                 fetchTodos("notes").then(setSavedTodoNotes);
                 setEditMode(false);
               }}
-              className="h-10 hover:bg-yellow-400 hover:bg-opacity-50 cursor-pointer transition rounded-full p-2 text-gray-500"
+              Icon={SaveIcon}
             />
           </div>
         </div>

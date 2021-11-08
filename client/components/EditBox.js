@@ -1,7 +1,7 @@
 import { useRef, useMemo } from "react";
 import { debounce } from "lodash";
 import { PlusIcon, XIcon } from "@heroicons/react/outline";
-import { updateTodos } from "../utils/apiCalls";
+import { fetchTodos, updateTodos } from "../utils/apiCalls";
 export const EditBox = ({
   todosToUpdate,
   setTodosToUpdate,
@@ -12,12 +12,15 @@ export const EditBox = ({
   setEditMode,
   savingStatus,
   setSavingStatus,
+  setSavedTodoLists,
 }) => {
   const editBoxRef = useRef();
   const DEBOUNCED_TIME = 1500; // Em ms
 
   const handleChange = async (payload) => {
     await updateTodos(listId, payload, "lists");
+    const newLists = await fetchTodos("lists");
+    setSavedTodoLists(newLists);
   };
 
   const debouncedHandleChange = useMemo(
@@ -95,6 +98,8 @@ export const EditBox = ({
                       };
 
                       await updateTodos(listId, payload, "lists");
+                      const newLists = await fetchTodos("lists");
+                      setSavedTodoLists(newLists);
                       setSavingStatus({
                         date: new Date(),
                         message: "Last Edited at:",
@@ -159,6 +164,7 @@ export const EditBox = ({
                             date: new Date(),
                             message: "Last Edited at:",
                           });
+                          fetchTodos("lists").then(setSavedTodoLists);
                         }, DEBOUNCED_TIME);
                       }}
                       className="hidden h-4 ml-auto mr-8 text-gray-400 group-hover:block cursor-pointer "
