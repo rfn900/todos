@@ -156,7 +156,6 @@ export const TodoListsView = () => {
                         ...todos.slice(0, index),
                         ...todos.slice(index + 1),
                       ];
-                      console.log(newTodos);
                       setTodos(newTodos);
                     }}
                   />
@@ -200,7 +199,6 @@ export const TodoListsView = () => {
                     todos,
                     dateLastEdited: new Date(),
                   };
-                  console.log(payload);
                   await postTodos(payload, "lists");
                   fetchTodos("lists").then(setSavedTodoLists);
                   setTodos(null);
