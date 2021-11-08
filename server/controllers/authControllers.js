@@ -23,11 +23,12 @@ const createAndSendToken = (user, statusCode, req, res) => {
 
 const logMeIn = async (req, res, next) => {
   const { tokenId } = req.body;
-  response = await client.verifyIdToken({
+  const response = await client.verifyIdToken({
     idToken: tokenId,
     audience: process.env.GOOGLE_CLIENT_ID,
   });
 
+  /* eslint-disable camelcase */
   const { email_verified, name, email, picture } = response.payload;
 
   if (email_verified) {
@@ -63,4 +64,4 @@ const deleteMe = catchAsync(async (req, res, next) => {
   res.status(203).json({ success: true });
 });
 
-module.exports = { logMeIn, deleteMe };
+module.exports = { logMeIn, deleteMe, generateToken };

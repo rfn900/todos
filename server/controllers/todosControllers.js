@@ -32,7 +32,7 @@ const createTodoList = catchAsync(async (req, res, next) => {
     dateLastEdited,
   };
 
-  let todoList = new TodoLists(payload);
+  const todoList = new TodoLists(payload);
 
   await todoList.save();
   res.status(200).json({

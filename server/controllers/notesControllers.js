@@ -27,7 +27,7 @@ const createTodoNotes = catchAsync(async (req, res, next) => {
     notes,
     dateLastEdited,
   };
-  let todoNotes = new TodoNotes(payload);
+  const todoNotes = new TodoNotes(payload);
 
   await todoNotes.save();
   res.status(200).json({
