@@ -1,6 +1,5 @@
 import { PencilAltIcon, SaveIcon, TrashIcon } from "@heroicons/react/outline";
 import { useState, useRef } from "react";
-import ReactTooltip from "react-tooltip";
 import { MDEditor } from "./Markdown";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -29,7 +28,9 @@ export const TodoNotesCard = ({ todoNotes, setSavedTodoNotes }) => {
           />
         </div>
         <div className="w-full pb-8 px-8 wmde-markdown wmde-markdown-color">
-          <ReactMarkdown children={todosToUpdate} remarkPlugins={[remarkGfm]} />
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>
+            {todosToUpdate}
+          </ReactMarkdown>
         </div>
         <div className="w-full h-10 mt-auto bg-gray-50">
           <div className="flex items-center justify-between w-full h-full opacity-0 transition duration-300 group-hover:opacity-100">
@@ -40,7 +41,6 @@ export const TodoNotesCard = ({ todoNotes, setSavedTodoNotes }) => {
                   new Date(savingStatus.date).toLocaleString()}
               </p>
             </div>
-            <ReactTooltip />
             <ButtonMain
               toolTipText="Delete Notes"
               disable={false}
@@ -86,14 +86,11 @@ export const TodoNotesCard = ({ todoNotes, setSavedTodoNotes }) => {
                   new Date(savingStatus.date).toLocaleString()}
               </p>
             </div>
-            <ReactTooltip />
-            <SaveIcon
-              data-tip="Save & Exit"
-              data-type="dark"
+            <ButtonMain
+              toolTipText="Clear Note"
               data-place="left"
-              data-effect="solid"
-              data-class="text-sm"
-              onClick={async () => {
+              disable={false}
+              eventHandler={async () => {
                 setSavingStatus({
                   date: null,
                   message: "Saving...",
@@ -110,7 +107,7 @@ export const TodoNotesCard = ({ todoNotes, setSavedTodoNotes }) => {
                 fetchTodos("notes").then(setSavedTodoNotes);
                 setEditMode(false);
               }}
-              className="h-10 hover:bg-yellow-400 hover:bg-opacity-50 cursor-pointer transition rounded-full p-2 text-gray-500"
+              Icon={SaveIcon}
             />
           </div>
         </div>

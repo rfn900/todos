@@ -34,7 +34,7 @@ export const TodoListCard = ({ todoList, setSavedTodoLists }) => {
                   type="checkbox"
                   checked={todo.completed}
                   className="w-4 h-4 mt-1 text-yellow-400 border-gray-300 rounded cursor-pointer focus:ring-gray-500"
-                  onChange={async (e) => {
+                  onChange={async () => {
                     setSavingStatus({
                       date: false,
                       message: "Saving...",
@@ -111,6 +111,7 @@ export const TodoListCard = ({ todoList, setSavedTodoLists }) => {
         setEditMode={setEditMode}
         savingStatus={savingStatus}
         setSavingStatus={setSavingStatus}
+        setSavedTodoLists={setSavedTodoLists}
       />
     </div>
   );

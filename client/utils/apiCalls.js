@@ -67,7 +67,7 @@ export const deleteTodos = async (id, type) => {
 
 export const fetchLoggedUser = async () => {
   const token = localStorage.getItem("token");
-  let config = {
+  const config = {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -82,7 +82,7 @@ export const fetchLoggedUser = async () => {
 
 export const deleteMe = async () => {
   const token = localStorage.getItem("token");
-  let config = {
+  const config = {
     headers: {
       Authorization: `Bearer ${token}`,
     },
