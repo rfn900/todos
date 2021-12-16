@@ -43,6 +43,10 @@ app.use("/api/v1/todos/notes", notesRouter);
 app.use("/api/v1/users", usersRouter);
 app.use("/auth", authRouter);
 
+app.get("/", (req, res) => {
+  res.status(200).json({ message: "Welcome to todos at rods.dev" });
+});
+
 // Global error handler
 app.use((err, req, res, next) => {
   res.status(err.statusCode).json({
